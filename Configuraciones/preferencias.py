@@ -1,35 +1,29 @@
 import psycopg2
 import sys
-sys.path.append("/home/gvaldez/pruebas-hips/hips-2021/Base-de-datos") 
+sys.path.append("/home/gvaldez/pruebas-hips/hips-2021/Base-de-datos") #se debe cambiar al directorio correcto
 from base_datos import conectar_postgres, cerrar_conexion
 from dao import obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
 #from modelos import AplicacionPeligrosa, General, LimiteProceso, Md5sum
 import subprocess
 
-
+#Funcion que guarda las preferencias/configuraciones del administrador en una lista
+#Trae las configuraciones de la base de datos postgres
 def guardar_preferencias():
     preferencias = {'aplicacion_peligrosa':'','limite_proceso':[],'general':[], 'md5sum': [] }
 
     #Aqui cargamos las prefencias del usuario en cuanto a las aplicaciones maliciosas como sniffers.
     datos = obtenerAplicacionPeligrosa()
-    print("Aplicacion peligrosa  len() ", len(datos))
-    print(datos, end='\n\n')
     dato_string = ''
-    for fila in range(0, len(datos)):
-        #fila= AplicacionPeligrosa(fila)
-        print("Datos[fila]:", datos[fila].getNombreSniffer(), fila)
-        dato_string += datos[fila].getNombreSniffer() +'|'
-        print("Dato string", dato_string)
-        #dato_string += fila.getNombreSniffer() +'|'
+    for i in range(0, len(datos)):
+        dato_string += datos[i].getNombreSniffer() +'|'
     if(dato_string != ''):
         preferencias['aplicacion_peligrosa'] = dato_string[:-1] # le quitamos el ultimo '|'
 
     #Aqui cargamos las prefencias del usuario en cuanto al uso máximo de CPU, memoria RAM, y máximo tiempo de vida de los procesos.
     datos = obtenerLimiteProceso()
     dato_lista = []
-    for fila in range (0, len(datos)):
-        #fila = LimiteProceso(fila)
-        dato_lista.append({'nombre_proceso':datos[fila].getNombreProceso(), 'uso_cpu':datos[fila].getUsoCpu(), 'uso_memoria':datos[fila].getUsoMemoria(), 'tiempo_maximo_ejecucion':datos[fila].getTiempoMaximoEjecucion()})
+    for i in range (0, len(datos)):
+        dato_lista.append({'nombre_proceso':datos[i].getNombreProceso(), 'uso_cpu':datos[i].getUsoCpu(), 'uso_memoria':datos[i].getUsoMemoria(), 'tiempo_maximo_ejecucion':datos[i].getTiempoMaximoEjecucion()})
     preferencias['limite_proceso'] = dato_lista
 
     #Aqui cargamos las preferencias del usuario en cuanto a  informaciones generales como ip, correo, contrasenha y algunos valores por defecto.
@@ -45,7 +39,6 @@ def guardar_preferencias():
     datos = dbCursor.fetchall()
     fue_actualizado = False
     for fila in datos:
-        print("Directorio: ", fila[0])
         update_md5sum = 'UPDATE md5sum SET hash=\''+crear_md5sum_hash(fila[0])+'\' WHERE directorio=\''+ fila[0]+'\';'
         dbCursor.execute(update_md5sum)
         fue_actualizado = True
@@ -53,17 +46,15 @@ def guardar_preferencias():
     if fue_actualizado is not True: #si no fue actualizado, directamente se hace un select para recuperar los hashes
         datos = obtenerMd5sum('', 'hash')
         dato_lista = []
-        for fila in range (0, len(datos)):
-            #fila = Md5sum(fila)
-            dato_lista.append(datos[fila].getHash())
+        for i in range (0, len(datos)):
+            dato_lista.append(datos[i].getHash())
         preferencias['md5sum']= dato_lista
     else: #si fue actualizado, se cierra la conexion y se vuelve a abrir para obtener los hashes
         cerrar_conexion(dbConexion, dbCursor)
         datos = obtenerMd5sum('', 'hash')
         dato_lista = []
-        for fila in range (0, len(datos)):
-            #fila = Md5sum(fila)
-            dato_lista.append(datos[fila].getHash())
+        for i in range (0, len(datos)):
+            dato_lista.append(datos[i].getHash())
         preferencias['md5sum']= dato_lista
     return preferencias
 

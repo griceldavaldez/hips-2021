@@ -30,7 +30,6 @@ def obtenerGeneral():
 def insertarGeneral(obj_gral):
     try:
         dbConexion, dbCursor = conectar_postgres()
-        #obj_gral = General(obj_gral)
         insert_general = "INSERT INTO general(ip,correo,contrasenha_correo,uso_cpu_por_defecto,uso_memoria_por_defecto,intento_maximo_ssh,correo_maximo_por_usuario,cola_maxima_correo) "
         insert_general += "values('{}','{}','{}',{},{},{},{});"
         ip = obj_gral.getIP()
@@ -53,7 +52,6 @@ def insertarGeneral(obj_gral):
 def actualizarGeneral(obj_gral):
     try:
         dbConexion, dbCursor = conectar_postgres()
-        #obj_gral = General(obj_gral)
         update_general = "UPDATE general SET "
         if obj_gral.getIP() is not None:
             update_campo = update_general +  "ip='{}';"
@@ -105,37 +103,33 @@ def eliminarGeneral():
 def obtenerMd5sum(dir, hash):
     try:
         dbConexion, dbCursor = conectar_postgres()
-        cont = 0  
-        filtro = []
-        if dir == 'directorio':
-            filtro.append('directorio')
-            cont += 1
-        if hash == 'hash':
-            filtro.append('hash')
-            cont += 1
+        filtro = ''
+        if dir == 'directorio' and hash != 'hash':
+            filtro = 'directorio'
+        if hash == 'hash' and dir != 'directorio':
+            filtro = 'hash'
         filtro = str(filtro)
         filtro = filtro.replace(' ', '')
         filtro = filtro.replace('[', '')
         filtro = filtro.replace(']', '')
-        filtro = filtro.replace("'", '')
-        print(str(filtro))    
-        if len(filtro) == 0 or cont == 2:
+        filtro = filtro.replace("'", '')  
+        if filtro == '':
             select_md5sum = "SELECT * FROM md5sum;"
             dbCursor.execute(select_md5sum)
             datos = dbCursor.fetchall()
-            obj_md5sum = Md5sum()
             datos_lista = []
             for fila in datos:
+                obj_md5sum = Md5sum()
                 obj_md5sum.setDirectorio(fila[0])
                 obj_md5sum.setHash(fila[1])
                 datos_lista.append(obj_md5sum)
-        elif len(filtro) == 1 or cont == 1:
+        else:
             select_md5sum =  "SELECT " + str(filtro) + " FROM md5sum;"
             dbCursor.execute(select_md5sum)
             datos = dbCursor.fetchall()
-            obj_md5sum = Md5sum()
             datos_lista = []
             for fila in datos:
+                obj_md5sum = Md5sum()
                 if hash == 'hash':
                     obj_md5sum.setHash(fila[0])
                 if dir == 'directorio':
@@ -147,11 +141,6 @@ def obtenerMd5sum(dir, hash):
     finally:
         cerrar_conexion(dbConexion, dbCursor)
     return datos_lista
-
-
-
-
-
 
 #Inserta los directorios de los cuales vamos a generar los hashes
 def insertarMd5sum(obj_md5sum):
@@ -213,13 +202,10 @@ def obtenerAplicacionPeligrosa():
         select_aplicacion_peligrosa =  "SELECT * FROM aplicacion_peligrosa;"
         dbCursor.execute(select_aplicacion_peligrosa)
         datos = dbCursor.fetchall()
-        print("App peligrosa query", datos)
         lista_datos = []
-        obj_app_pelig = AplicacionPeligrosa()
         for fila in datos:
+            obj_app_pelig = AplicacionPeligrosa()
             obj_app_pelig.setNombreSniffer(fila[0])
-            print("FILA[0]: ", fila[0])
-            print("lista app peli",obj_app_pelig.getNombreSniffer()) 
             lista_datos.append(obj_app_pelig)
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerAplicacionPeligrosa()")
@@ -263,9 +249,9 @@ def obtenerLimiteProceso():
         select_limite_proceso =  "SELECT * FROM limite_proceso;"
         dbCursor.execute(select_limite_proceso)
         datos = dbCursor.fetchall()
-        obj_lim_process = LimiteProceso()
         lista_datos = []
         for fila in datos:
+            obj_lim_process = LimiteProceso()
             obj_lim_process.setNombreProceso(fila[0])
             obj_lim_process.setUsoCpu(fila[1])
             obj_lim_process.setUsoMemoria(fila[2])
@@ -351,8 +337,8 @@ def obtenerAlarmaPrevencion(filtro_tipo_escaneo):
             dbCursor.execute(select_alarma_prevencion.format(filtro_tipo_escaneo))
         datos = dbCursor.fetchall()
         lista_datos = []
-        obj_alarm_prev = AlarmaPrevencion()
         for fila in datos:
+            obj_alarm_prev = AlarmaPrevencion()
             obj_alarm_prev.setFechaHora(fila[0])
             obj_alarm_prev.setTipoEscaneo(fila[1])
             obj_alarm_prev.setResultado(fila[2])
