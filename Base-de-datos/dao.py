@@ -1,6 +1,5 @@
-from psycopg2.sql import NULL
 from modelos import General, Md5sum, LimiteProceso, AlarmaPrevencion, AplicacionPeligrosa
-from base_datos import conectar_postgres, cerrar_conexion, datos_conexion_postgres
+from base_datos import conectar_postgres, cerrar_conexion
 import psycopg2
 
 #CRUD PARA LA CLASE GENERAL
@@ -101,7 +100,7 @@ def eliminarGeneral():
         cerrar_conexion(dbConexion, dbCursor)
 
 
-#CRUD PARA LA CLASE Md5sum
+#CRUD PARA LA CLASE Md5SUM
 #Lista los registros de la tabla md5sum segun el directorio y/o hash
 def obtenerMd5sum(dir, hash):
     try:
@@ -136,23 +135,21 @@ def obtenerMd5sum(dir, hash):
         cerrar_conexion(dbConexion, dbCursor)
     return datos_lista
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#Inserta los directorios de los cuales vamos a generar los hashes
 def insertarMd5sum(obj_md5sum):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        insert_md5sum = "INSERT INTO md5sum(directorio) values('{}');" #solo se inserta el directorio, en otra parte se carga el hash
+        directorio = obj_md5sum.getDirectorio()
+        dbCursor.execute(insert_md5sum.format(directorio))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion insertarMd5sum()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+'''def insertarMd5sum(obj_md5sum):
     dbConexion, dbCursor = conectar_postgres()
     obj_md5sum = Md5sum(obj_md5sum) #hacemos cast para que pueda reconocerlo como objeto 
     directorio = obj_md5sum.getDirectorio()
@@ -160,4 +157,206 @@ def insertarMd5sum(obj_md5sum):
     insert_md5sum = "INSERT INTO md5sum(directorio, hash) values({}, {})"
     dbCursor.execute(insert_md5sum.format(directorio, hash))
     dbConexion.commit()
-    cerrar_conexion(dbConexion, dbCursor)
+    cerrar_conexion(dbConexion, dbCursor)'''
+
+#Actualiza/Modifica los hashes segun corresponda a un directorio dado
+def actualizarMd5sum(obj_md5sum):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        insert_md5sum = "UPDATE md5sum SET hash = '{}' where directorio = '{}';"
+        directorio = obj_md5sum.getDirectorio()
+        hash = obj_md5sum.getHash()
+        dbCursor.execute(insert_md5sum.format(hash, directorio))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion actualizarMd5sum()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Elimina todos los registros de la tabla md5sum
+def eliminarMd5sum():
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        delete_md5sum =  "DELETE FROM md5sum;"
+        dbCursor.execute(delete_md5sum)
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion eliminarMd5sum()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#CRUD PARA LA CLASE AplicacionPeligrosa
+#Lista todas las aplicaciones peligrosas como sniffers
+def obtenerAplicacionPeligrosa():
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        select_aplicacion_peligrosa =  "SELECT * FROM aplicacion_peligrosa;"
+        dbCursor.execute(select_aplicacion_peligrosa)
+        datos = dbCursor.fetchall()
+        lista_datos = []
+        obj_app_pelig = AplicacionPeligrosa()
+        for fila in datos:
+            obj_app_pelig.setNombreSniffer(fila[0])
+            lista_datos.append(obj_app_pelig)
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion obtenerAplicacionPeligrosa()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+    return lista_datos
+
+#Inserta aplicaciones peligrosas como sniffers
+def insertarAplicacionPeligrosa(obj_app_pelig):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        insert_aplicacion_peligrosa = "INSERT INTO aplicacion_peligrosa(nombre_sniffer) values('{}');"
+        nombre_sniffer = obj_app_pelig.getNombreSniffer()
+        dbCursor.execute(insert_aplicacion_peligrosa.format(nombre_sniffer))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion insertarAplicacionPeligrosa()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Elimina todos los registros de la tabla aplicacion_peligrosa
+def eliminarAplicacionPeligrosa():
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        delete_aplicacion_peligrosa =  "DELETE FROM aplicacion_peligrosa;"
+        dbCursor.execute(delete_aplicacion_peligrosa)
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion eliminarAplicacionPeligrosa()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#CRUD PARA LA CLASE LimiteProceso
+#Lista las configuraciones sobre los limites de los procesos
+def obtenerLimiteProceso():
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        select_limite_proceso =  "SELECT * FROM limite_proceso;"
+        dbCursor.execute(select_limite_proceso)
+        datos = dbCursor.fetchall()
+        obj_lim_process = LimiteProceso()
+        lista_datos = []
+        for fila in datos:
+            obj_lim_process.setNombreProceso(fila[0])
+            obj_lim_process.setUsoCpu(fila[1])
+            obj_lim_process.setUsoMemoria(fila[2])
+            obj_lim_process.setTiempoMaximoEjecucion(fila[3])
+            lista_datos.append(obj_lim_process)
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion obtenerLimiteProceso()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+    return lista_datos
+
+#Inserta las configuraciones sobre los limites de los procesos 
+def insertarLimiteProceso(obj_lim_process):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        insert_limite_proceso = "INSERT INTO limite_proceso(nombre_proceso,uso_cpu,uso_memoria,tiempo_maximo_ejecucion) values('{}',{},{},{});"
+        nombre_proceso = obj_lim_process.getNombreProceso() 
+        uso_cpu = obj_lim_process.getUsoCpu()
+        uso_memoria = obj_lim_process.getUsoMemoria()
+        tiempo_maximo_ejecucion = obj_lim_process.getTiempoMaximoEjecucion()
+        dbCursor.execute(insert_limite_proceso.format(nombre_proceso, uso_cpu, uso_memoria, tiempo_maximo_ejecucion))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion insertarLimiteProceso()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Lista las configuraciones sobre los limites de los procesos dado su nombre
+def actualizarLimiteProceso(obj_lim_process):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        update_limite_proceso = "UPDATE limite_proceso SET "
+        where = " where nombre_proceso = '{}';"
+        nombre_proceso = obj_lim_process.getNombreProceso() #No debe ser null
+        if obj_lim_process.getUsoCpu() is not None:
+            campo = "uso_cpu = {};"
+            query = update_limite_proceso + campo + where
+            dbCursor.execute(query.format(obj_lim_process.getUsoCpu(), nombre_proceso))
+        if obj_lim_process.getUsoMemoria() is not None:
+            campo = "uso_memoria = {} "
+            query = update_limite_proceso + campo + where
+            dbCursor.execute(query.format(obj_lim_process.getUsoMemoria(), nombre_proceso))
+        if obj_lim_process.getTiempoMaximoEjecucion()  is not None:
+            campo = "tiempo_maximo_ejecucion = {} "
+            query = update_limite_proceso + campo + where
+            dbCursor.execute(query.format(obj_lim_process.getTiempoMaximoEjecucion(), nombre_proceso))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion actualizarLimiteProceso()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Elimina todos los registros de la tabla limite_proceso
+def eliminarLimiteProceso():
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        delete_limite_proceso =  "DELETE FROM limite_proceso;"
+        dbCursor.execute(delete_limite_proceso)
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion eliminarLimiteProceso()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#CRUD PARA LA CLASE AlarmaPrevencion
+#Lista las alarmas y acciones realizadas
+def obtenerAlarmaPrevencion(filtro_tipo_escaneo):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        tieneFiltro = False
+        if len(filtro_tipo_escaneo) == 0:
+            select_alarma_prevencion = "SELECT * from alarma_prevencion;"
+        else:
+            select_alarma_prevencion = "SELECT * from alarma_prevencion where tipo_escaneo = '{}';"
+            tieneFiltro = True
+        if tieneFiltro is not True:
+            dbCursor.execute(select_alarma_prevencion)
+        else:
+            dbCursor.execute(select_alarma_prevencion.format(filtro_tipo_escaneo))
+        datos = dbCursor.fetchall()
+        lista_datos = []
+        obj_alarm_prev = AlarmaPrevencion()
+        for fila in datos:
+            obj_alarm_prev.setFechaHora(fila[0])
+            obj_alarm_prev.setTipoEscaneo(fila[1])
+            obj_alarm_prev.setResultado(fila[2])
+            obj_alarm_prev.setAccion(fila[3])
+            lista_datos.append(obj_alarm_prev)    
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion obtenerAlarmaPrevencion()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+    return lista_datos
+
+#Inserta las alarmas registradas con sus acciones/prevenciones
+def insertarAlarmaPrevencion(obj_alarm_prev):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        insert_alarma_prevencion = "INSERT INTO alarma_prevencion(fecha_hora,tipo_escaneo,resultado,accion) values('{}','{}','{}','{}');"
+        fecha_hora = obj_alarm_prev.getFechaHora()
+        tipo_escaneo = obj_alarm_prev.getTipoEscaneo()
+        resultado = obj_alarm_prev.getResultado()
+        accion = obj_alarm_prev.getAccion()
+        dbCursor.execute(insert_alarma_prevencion.format(fecha_hora,tipo_escaneo,resultado,accion))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion insertarAlarmaPrevencion()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
