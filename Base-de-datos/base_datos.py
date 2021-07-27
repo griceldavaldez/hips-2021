@@ -3,7 +3,7 @@ import psycopg2
 #Lee de un archivo los datos para la conexion a la base de datos
 #Retorna: nombre de la base de datos, usuario y contrasenha
 def datos_conexion_postgres():
-    archivo = open("conexion_postgres.txt", "r") #FIJARSE SI HACE FALTA MODIFICAR RUTA
+    archivo = open("/home/gvaldez/pruebas-hips/hips-2021/Base-de-datos/conexion_postgres.txt", "r") #FIJARSE SI HACE FALTA MODIFICAR RUTA
     lineas = archivo.readlines()
     for i in range(0, len(lineas)):
         lineas[i] = lineas[i].strip('\n') 

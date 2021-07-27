@@ -105,35 +105,53 @@ def eliminarGeneral():
 def obtenerMd5sum(dir, hash):
     try:
         dbConexion, dbCursor = conectar_postgres()
+        cont = 0  
         filtro = []
         if dir == 'directorio':
             filtro.append('directorio')
+            cont += 1
         if hash == 'hash':
             filtro.append('hash')
+            cont += 1
         filtro = str(filtro)
         filtro = filtro.replace(' ', '')
         filtro = filtro.replace('[', '')
         filtro = filtro.replace(']', '')
         filtro = filtro.replace("'", '')
-        print(str(filtro))
-        if len(filtro) == 0:
+        print(str(filtro))    
+        if len(filtro) == 0 or cont == 2:
             select_md5sum = "SELECT * FROM md5sum;"
-        else:
+            dbCursor.execute(select_md5sum)
+            datos = dbCursor.fetchall()
+            obj_md5sum = Md5sum()
+            datos_lista = []
+            for fila in datos:
+                obj_md5sum.setDirectorio(fila[0])
+                obj_md5sum.setHash(fila[1])
+                datos_lista.append(obj_md5sum)
+        elif len(filtro) == 1 or cont == 1:
             select_md5sum =  "SELECT " + str(filtro) + " FROM md5sum;"
-        dbCursor.execute(select_md5sum)
-        datos = dbCursor.fetchall()
-        obj_md5sum = Md5sum()
-        datos_lista = []
-        for fila in datos:
-            obj_md5sum.setDirectorio(fila[0])
-            obj_md5sum.setHash(fila[1])
-            datos_lista.append(obj_md5sum)
+            dbCursor.execute(select_md5sum)
+            datos = dbCursor.fetchall()
+            obj_md5sum = Md5sum()
+            datos_lista = []
+            for fila in datos:
+                if hash == 'hash':
+                    obj_md5sum.setHash(fila[0])
+                if dir == 'directorio':
+                    obj_md5sum.setDirectorio(fila[0])
+                datos_lista.append(obj_md5sum)
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerMd5sum()")
         print("Motivo:  ", error)
     finally:
         cerrar_conexion(dbConexion, dbCursor)
     return datos_lista
+
+
+
+
+
 
 #Inserta los directorios de los cuales vamos a generar los hashes
 def insertarMd5sum(obj_md5sum):
@@ -195,10 +213,13 @@ def obtenerAplicacionPeligrosa():
         select_aplicacion_peligrosa =  "SELECT * FROM aplicacion_peligrosa;"
         dbCursor.execute(select_aplicacion_peligrosa)
         datos = dbCursor.fetchall()
+        print("App peligrosa query", datos)
         lista_datos = []
         obj_app_pelig = AplicacionPeligrosa()
         for fila in datos:
             obj_app_pelig.setNombreSniffer(fila[0])
+            print("FILA[0]: ", fila[0])
+            print("lista app peli",obj_app_pelig.getNombreSniffer()) 
             lista_datos.append(obj_app_pelig)
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerAplicacionPeligrosa()")

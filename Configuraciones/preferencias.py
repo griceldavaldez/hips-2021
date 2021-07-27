@@ -1,6 +1,6 @@
 import psycopg2
 import sys
-sys.path.append("../Base-de-datos") 
+sys.path.append("/home/gvaldez/pruebas-hips/hips-2021/Base-de-datos") 
 from base_datos import conectar_postgres, cerrar_conexion
 from dao import obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
 #from modelos import AplicacionPeligrosa, General, LimiteProceso, Md5sum
@@ -12,26 +12,30 @@ def guardar_preferencias():
 
     #Aqui cargamos las prefencias del usuario en cuanto a las aplicaciones maliciosas como sniffers.
     datos = obtenerAplicacionPeligrosa()
+    print("Aplicacion peligrosa  len() ", len(datos))
+    print(datos, end='\n\n')
     dato_string = ''
-    for fila in datos:
+    for fila in range(0, len(datos)):
         #fila= AplicacionPeligrosa(fila)
-        dato_string += fila.getNombreSniffer() +'|'
+        print("Datos[fila]:", datos[fila].getNombreSniffer(), fila)
+        dato_string += datos[fila].getNombreSniffer() +'|'
+        print("Dato string", dato_string)
+        #dato_string += fila.getNombreSniffer() +'|'
     if(dato_string != ''):
         preferencias['aplicacion_peligrosa'] = dato_string[:-1] # le quitamos el ultimo '|'
 
     #Aqui cargamos las prefencias del usuario en cuanto al uso máximo de CPU, memoria RAM, y máximo tiempo de vida de los procesos.
     datos = obtenerLimiteProceso()
     dato_lista = []
-    for fila in datos:
+    for fila in range (0, len(datos)):
         #fila = LimiteProceso(fila)
-        dato_lista.append({'nombre_proceso':fila.getNombreProceso(), 'uso_cpu':fila.getUsoCpu(), 'uso_memoria':fila.getUsoMemoria(), 'tiempo_maximo_ejecucion':fila.getTiempoMaximoEjecucion()})
+        dato_lista.append({'nombre_proceso':datos[fila].getNombreProceso(), 'uso_cpu':datos[fila].getUsoCpu(), 'uso_memoria':datos[fila].getUsoMemoria(), 'tiempo_maximo_ejecucion':datos[fila].getTiempoMaximoEjecucion()})
     preferencias['limite_proceso'] = dato_lista
 
     #Aqui cargamos las preferencias del usuario en cuanto a  informaciones generales como ip, correo, contrasenha y algunos valores por defecto.
     datos = obtenerGeneral()
     dato_lista = []
-    for fila in datos:
-        dato_lista.append({'ip':fila.getIP(),'correo_admin':fila.getCorreo(),'pass_admin':fila.getContrasenhaCorreo(),'MAXCPU':fila.getUsoCpuPorDefecto(),'MAXMEM':fila.getUsoMemoriaPorDefecto(),'intento_maximo_ssh': fila.getIntentoMaximoSSH(),'correo_maximo_por_usuario':fila.getCorreoMaximoPorUsuario(),'cola_maxima_correo': fila.getColaMaximaCorreo()})
+    dato_lista.append({'ip':datos.getIP(),'correo_admin':datos.getCorreo(),'pass_admin':datos.getContrasenhaCorreo(),'MAXCPU':datos.getUsoCpuPorDefecto(),'MAXMEM':datos.getUsoMemoriaPorDefecto(),'intento_maximo_ssh': datos.getIntentoMaximoSSH(),'correo_maximo_por_usuario':datos.getCorreoMaximoPorUsuario(),'cola_maxima_correo': datos.getColaMaximaCorreo()})
     preferencias['general'] = dato_lista
 
     #Aqui cargamos las preferencias en cuanto a los directorios junto con sus hashes MD5SUM.
@@ -49,17 +53,17 @@ def guardar_preferencias():
     if fue_actualizado is not True: #si no fue actualizado, directamente se hace un select para recuperar los hashes
         datos = obtenerMd5sum('', 'hash')
         dato_lista = []
-        for fila in datos:
+        for fila in range (0, len(datos)):
             #fila = Md5sum(fila)
-            dato_lista.append(fila.getHash())
+            dato_lista.append(datos[fila].getHash())
         preferencias['md5sum']= dato_lista
     else: #si fue actualizado, se cierra la conexion y se vuelve a abrir para obtener los hashes
         cerrar_conexion(dbConexion, dbCursor)
         datos = obtenerMd5sum('', 'hash')
         dato_lista = []
-        for fila in datos:
+        for fila in range (0, len(datos)):
             #fila = Md5sum(fila)
-            dato_lista.append(fila.getHash())
+            dato_lista.append(datos[fila].getHash())
         preferencias['md5sum']= dato_lista
     return preferencias
 
