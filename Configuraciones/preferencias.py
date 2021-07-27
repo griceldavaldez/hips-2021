@@ -1,9 +1,8 @@
-import psycopg2
-import sys
-sys.path.append("/home/gvaldez/pruebas-hips/hips-2021/Base-de-datos") #se debe cambiar al directorio correcto
-from base_datos import conectar_postgres, cerrar_conexion
-from dao import obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
-#from modelos import AplicacionPeligrosa, General, LimiteProceso, Md5sum
+
+from BaseDatos.base_datos import conectar_postgres, cerrar_conexion
+from BaseDatos.dao import actualizarMd5sum, obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
+from BaseDatos.modelos import Md5sum
+from Main.variables_globales import directorio_archivo_backup_hashes
 import subprocess
 
 #Funcion que guarda las preferencias/configuraciones del administrador en una lista
@@ -34,15 +33,16 @@ def guardar_preferencias():
 
     #Aqui cargamos las preferencias en cuanto a los directorios junto con sus hashes MD5SUM.
     dbConexion, dbCursor = conectar_postgres()
-    md5sum_query = "SELECT directorio FROM md5sum WHERE hash IS NULL OR hash=\'\'"
+    md5sum_query = "SELECT directorio FROM md5sum WHERE hash IS NULL OR hash=' '"
     dbCursor.execute(md5sum_query)
     datos = dbCursor.fetchall()
     fue_actualizado = False
     for fila in datos:
-        update_md5sum = 'UPDATE md5sum SET hash=\''+crear_md5sum_hash(fila[0])+'\' WHERE directorio=\''+ fila[0]+'\';'
-        dbCursor.execute(update_md5sum)
+        obj_md5sum = Md5sum()
+        obj_md5sum.setDirectorio(fila[0])
+        obj_md5sum.setHash(str(crear_md5sum_hash(fila[0])))
+        actualizarMd5sum(obj_md5sum)
         fue_actualizado = True
-    dbConexion.commit()
     if fue_actualizado is not True: #si no fue actualizado, directamente se hace un select para recuperar los hashes
         datos = obtenerMd5sum('', 'hash')
         dato_lista = []
@@ -65,14 +65,16 @@ def guardar_preferencias():
 #	dir_str	(string)absolute path del archivo al cual queremos crearle un hash md5sum.
 #Retorna:
 #	(string) el hash producido
-directorio_archivo_backup_hashes = '/etc/backup_hashes_files'
 def crear_md5sum_hash(directorio_string):
-	global directorio_archivo_backup_hashes
-	p =subprocess.Popen("cp -R "+directorio_string+" "+directorio_archivo_backup_hashes+"/", stdout=subprocess.PIPE, shell=True)
-	(output, err) = p.communicate()
-	p =subprocess.Popen("md5sum "+directorio_string, stdout=subprocess.PIPE, shell=True)
-	(output, err) = p.communicate()
-	print('crear_md5sum_hash: output.decode("utf-8")', output.decode("utf-8"))
-	#print('\n')
-	print('crear_md5sum_hash: output.decode("utf-8")[:-1]',output.decode("utf-8")[:-1])
-	return output.decode("utf-8")[:-1]
+    global directorio_archivo_backup_hashes
+    p =subprocess.Popen("cp -R "+directorio_string+" "+directorio_archivo_backup_hashes+"/", stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    p =subprocess.Popen("md5sum "+directorio_string, stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    #print('crear_md5sum_hash: output.decode("utf-8")', output.decode("utf-8"))
+    #print('\n')
+    #print('crear_md5sum_hash: output.decode("utf-8")[:-1]',output.decode("utf-8")[:-1])
+    var = str(output.decode("utf-8")[:-1])
+    var = var.strip(" {}".format(directorio_string))
+    #return output.decode("utf-8")[:-1]
+    return var
