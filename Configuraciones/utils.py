@@ -1,4 +1,5 @@
 import os
+from modelos import Usuario
 
 #recibe una ruta relativa y devuele la ruta absoluta
 def obtenerRutaAbsoluta(ruta_relativa):
@@ -11,12 +12,17 @@ print(obtenerRutaAbsoluta("BaseDatos/conexion_postgres.py"))
 
 #obtener el usuario permitido para acceder al sistema por la interfaz
 def obtenerUsuario(login):
-    archivo = open(obtenerRutaAbsoluta("Configuraciones/usuarios_sistema_web.txt"), "r")
+    archivo = open(obtenerRutaAbsoluta("usuarios_sistema_web.txt"), "r")
     lineas = archivo.readlines()
-    usuario
+    archivo.close()
     for i in range(0, len(lineas)):
         lineas[i] = lineas[i].strip('\n') 
         txt= lineas[i].split(";")
-
-    archivo.close()
-    return usuario
+        loginObtenido = txt[1]
+        if(loginObtenido == login):
+            usuario = Usuario()
+            usuario.setNombre(txt[0])
+            usuario.setLogin(txt[1])
+            usuario.setPassword(txt[2])
+            return usuario
+    pass
