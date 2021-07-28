@@ -24,3 +24,7 @@ class Usuario(UserMixin):
         self.password = password
     def __repr__(self):
         return "<Usuario Nombre:%s Login:%s>" % (self.nombre, self.login)
+    def check_password(self,password):
+        if(password == self.password):
+            return True
+        return False

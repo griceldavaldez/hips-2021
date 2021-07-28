@@ -1,11 +1,7 @@
 
-from flask import Flask, render_template, redirect, url_for,request, flash, Blueprint
-from flask_login import current_user, login_user, logout_user, LoginManager
-from werkzeug.urls import url_parse
-from Configuraciones import utils
+from flask_login import LoginManager
+from flask import Flask
 import os
-
-from app.auth.forms import LoginForm
 
 from app.common.filters import format_datetime
 
