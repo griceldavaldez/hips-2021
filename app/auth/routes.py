@@ -1,10 +1,9 @@
-from flask import (render_template, redirect, url_for,
-                   request, current_app)
+from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 from Configuraciones import utils
 
-from app import login_manager
+from app.init import login_manager
 
 from . import auth_bp
 from .forms import LoginForm
@@ -30,7 +29,7 @@ def login():
 @auth_bp.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('public.index'))
+    return redirect(url_for('auth.login'))
 
 
 @login_manager.user_loader

@@ -24,7 +24,8 @@ class Usuario(UserMixin):
         self.login = login 
     def setPassword(self, password):
         self.password = password 
-    def __init__(self, nombre, login, password):
+    def __init__(self, id, nombre, login, password):
+        self.id = id
         self.nombre = nombre
         self.login = login
         self.password = password
@@ -34,3 +35,8 @@ class Usuario(UserMixin):
     @staticmethod
     def get_by_id(id):
         return utils.obtenerUsuarioPorId(id)
+
+    def check_password(self,password):
+        if(password == self.password):
+            return True
+        return False
