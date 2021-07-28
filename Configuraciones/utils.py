@@ -1,5 +1,5 @@
 import os
-from Configuraciones.modelos import Usuario
+from Configuraciones.modelos2 import Usuario
 
 #recibe una ruta relativa y devuele la ruta absoluta
 def obtenerRutaAbsoluta(ruta_relativa):
