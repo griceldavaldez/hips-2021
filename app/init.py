@@ -22,9 +22,11 @@ def create_app():
     register_filters(app)
 
     # Registro de los Blueprints
-    app.register_blueprint(Blueprint('auth', __name__, template_folder='templates'))
+    from .auth import auth_bp
+    app.register_blueprint(auth_bp)
 
-    app.register_blueprint(Blueprint('public', __name__, template_folder='templates'))
+    from .public import public_bp
+    app.register_blueprint(public_bp)
     
     app.config["SECRET_KEY"] = os.urandom(32)
 
@@ -41,30 +43,4 @@ app = create_app()
 @app.route("/")
 def hello():
     return "Hello world!"
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('public.index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = utils.obtenerUsuario(form.login.data)
-        if user is not None and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            next_page = request.args.get('next')
-            if not next_page or url_parse(next_page).netloc != '':
-                next_page = url_for('public.index')
-            return redirect(next_page)
-    return render_template('auth/templates/login_form.html', form=form)
-
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('public.index'))
-
-
-@login_manager.user_loader
-def load_user(login):
-    return utils.obtenerUsuario(login)
 
