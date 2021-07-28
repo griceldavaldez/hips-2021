@@ -4,6 +4,14 @@ from Main.variables_globales import directorio_cuarentena
 from VerificarMd5sum.analisis_md5sum import verificar_md5sum
 from VerificarTmp.analisis_tmp import analisis_tmp
 from UsuariosConectados.usuarios_conectados import comprobar_usuarios_conectados
+from Correo.cola_correo import verificar_cola_correo
+from AtaqueSmtp.analisis_ataque_smtp import analisis_ataque_smtp
+from Sniffers.analisis_promiscuo import analisis_promiscuo
+from Procesos.analisis_consumo import analisis_consumo_procesos
+from AccesosInvalidos.analisis_accesos_invalidos import analisis_directorio_invalido
+from AccesosInvalidos.analisis_auths_failure import analisis_auths_failure
+from AccesosInvalidos.analisis_failure_ssh import analisis_failure_ssh
+from Cron.analisis_cron import analsis_cron
 
 #Funcion: main
 #	Invoca a todas las funciones necesarias para el HIPS repitiendose cada x intervalo de tiempo
@@ -20,6 +28,7 @@ def main():
     MAX_Q_COUNT = general['cola_maxima_correo']
     MAX_MAIL_PU = general['correo_maximo_por_usuario']
     MAX_SSH = general['intento_maximo_ssh']
+    MAX_FUZZ = 5
     P_DIR = '/var/log/messages'
 
     if os.path.isfile(P_DIR) is not True:
@@ -31,29 +40,27 @@ def main():
     #se quitan los permisos de ejecucion para este directorio
     p =subprocess.Popen("chmod 664 "+directorio_cuarentena, stdout=subprocess.PIPE, shell=True) 
     (output, err) = p.communicate()
-    
-    if LIMIT_PROCESOS['uso_cpu'] is None or LIMIT_PROCESOS['uso_cpu'] == '':
-        MAX_CPU = general['MAXCPU']
-    else:
-        MAX_CPU = LIMIT_PROCESOS['uso_cpu']
+
+    #si no se cargaron las configuraciones personalizadas, se cargan los valores por defecto
+    if LIMIT_PROCESOS['uso_cpu'] is None or LIMIT_PROCESOS['uso_cpu'] == '': 
+        LIMIT_PROCESOS['uso_cpu'] = general['MAXCPU']
+
     if LIMIT_PROCESOS['uso_memoria'] is None or LIMIT_PROCESOS['uso_memoria'] == '':
-        MAX_MEM = general['MAXMEM']
-    else:
-        MAX_MEM = LIMIT_PROCESOS['uso_memoria']
+        LIMIT_PROCESOS['uso_memoria'] = general['MAXMEM']
+  
 
     print("\n-------------------------\n\nESCANEANDO...\n\n-------------------------")
-    check_mailq(MAX_Q_COUNT)
-    check_smtp_attack(MAX_MAIL_PU)
-    check_promisc(P_DIR, P_APP_LIST)
-    process_usage(PROCESS_USAGE_LIMITS)
+    verificar_cola_correo(MAX_Q_COUNT, ADMIN_DATOS)
+    analisis_ataque_smtp(MAX_MAIL_PU, ADMIN_DATOS)
+    analisis_promiscuo(P_DIR, APPS_PELIGROSAS, ADMIN_DATOS)
+    analisis_consumo_procesos(LIMIT_PROCESOS, ADMIN_DATOS)
     comprobar_usuarios_conectados(ADMIN_DATOS)
-    check_invalid_dir(MY_IP,MAX_FUZZ) #www.algo.com/noexiste
-    check_promisc_apps(P_APP_LIST)
+    analisis_directorio_invalido(MI_IP,MAX_FUZZ, ADMIN_DATOS) #www.algo.com/noexiste
     verificar_md5sum(MD5SUM_LISTA, ADMIN_DATOS)
     analisis_tmp(ADMIN_DATOS)
-    check_auths_log()
-    check_cron_jobs(P_APP_LIST)
-    check_failed_ssh(MY_IP,MAX_SSH)
+    analisis_auths_failure(ADMIN_DATOS)
+    analsis_cron(APPS_PELIGROSAS, ADMIN_DATOS)
+    analisis_failure_ssh(MI_IP,MAX_SSH, ADMIN_DATOS)
     print('\n-------------------------\n\nESCANEO COMPLETADO\n\n-------------------------')
     return(0)
 
