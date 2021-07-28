@@ -2,11 +2,13 @@
 from BaseDatos.base_datos import conectar_postgres, cerrar_conexion
 from BaseDatos.dao import actualizarMd5sum, obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
 from BaseDatos.modelos import Md5sum
-from Main.variables_globales import directorio_archivo_backup_hashes
-import subprocess
+from VerificarMd5sum.analisis_md5sum import crear_md5sum_hash
 
-#Funcion que guarda las preferencias/configuraciones del administrador en una lista
-#Trae las configuraciones de la base de datos postgres
+#Funcion: guardar_preferencias
+#	Guarda las preferencias/configuraciones del administrador en una lista
+#	Trae las configuraciones de la base de datos postgres
+#Retorna:
+#	(list) con las configuraciones obtenidas
 def guardar_preferencias():
     preferencias = {'aplicacion_peligrosa':'','limite_proceso':[],'general':[], 'md5sum': [] }
 
@@ -58,23 +60,4 @@ def guardar_preferencias():
         preferencias['md5sum']= dato_lista
     return preferencias
 
-#Funcion: crear_md5sum_hash
-#Crea un hash md5sum utilizando la funcion md5sum para un archivo en especifico
-#Realiza una copia de seguridad del archivo en el directorio directorio_archivo_backup_hashes
-#Parametros:
-#	dir_str	(string)absolute path del archivo al cual queremos crearle un hash md5sum.
-#Retorna:
-#	(string) el hash producido
-def crear_md5sum_hash(directorio_string):
-    global directorio_archivo_backup_hashes
-    p =subprocess.Popen("cp -R "+directorio_string+" "+directorio_archivo_backup_hashes+"/", stdout=subprocess.PIPE, shell=True)
-    (output, err) = p.communicate()
-    p =subprocess.Popen("md5sum "+directorio_string, stdout=subprocess.PIPE, shell=True)
-    (output, err) = p.communicate()
-    #print('crear_md5sum_hash: output.decode("utf-8")', output.decode("utf-8"))
-    #print('\n')
-    #print('crear_md5sum_hash: output.decode("utf-8")[:-1]',output.decode("utf-8")[:-1])
-    var = str(output.decode("utf-8")[:-1])
-    var = var.strip(" {}".format(directorio_string))
-    #return output.decode("utf-8")[:-1]
-    return var
+
