@@ -34,5 +34,5 @@ def logout():
 
 
 @login_manager.user_loader
-def load_user(login):
-    return utils.obtenerUsuario(login)
+def load_user(user_id):
+    return utils.obtenerUsuarioPorId(int(user_id))
