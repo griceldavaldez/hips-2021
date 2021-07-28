@@ -3,8 +3,9 @@ from flask import Flask, render_template, redirect, url_for,request, flash, Blue
 from flask_login import current_user, login_user, logout_user, LoginManager
 from werkzeug.urls import url_parse
 from Configuraciones import utils
+import os
 
-from auth.forms import LoginForm
+from app.auth.forms import LoginForm
 
 from app.common.filters import format_datetime
 
@@ -21,11 +22,11 @@ def create_app():
     register_filters(app)
 
     # Registro de los Blueprints
-    from .auth import auth_bp
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(Blueprint('auth', __name__, template_folder='templates'))
 
-    from .public import public_bp
-    app.register_blueprint(public_bp)
+    app.register_blueprint(Blueprint('public', __name__, template_folder='templates'))
+    
+    app.config["SECRET_KEY"] = os.urandom(32)
 
     return app
 
@@ -54,7 +55,7 @@ def login():
             if not next_page or url_parse(next_page).netloc != '':
                 next_page = url_for('public.index')
             return redirect(next_page)
-    return render_template('auth/login_form.html', form=form)
+    return render_template('auth/templates/login_form.html', form=form)
 
 
 @app.route('/logout')

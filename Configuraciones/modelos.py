@@ -2,7 +2,7 @@ from flask_login import UserMixin
 
 
 
-class Usuario(db.Model, UserMixin):
+class Usuario(UserMixin):
 
     #Metodos para obtener los atributos de la clase
     def getNombre(self):
