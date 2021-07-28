@@ -1,10 +1,18 @@
+import subprocess, datetime, os, sys
 
-from Cuarentena.cuarentena import enviar_a_cuarentena
-from Logs.logs import echo_alarmas_log, echo_prevencion_log
-from Correo.correo import enviar_correo
-from BaseDatos.modelos import AlarmaPrevencion
-from BaseDatos.dao import insertarAlarmaPrevencion
-import subprocess, datetime
+sys.path.append( os.path.abspath('../Cuarentena/'))
+from cuarentena import enviar_a_cuarentena
+
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_alarmas_log, echo_prevencion_log
+
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from modelos import AlarmaPrevencion
+from dao import insertarAlarmaPrevencion
+
 
 #Funcion: analisis_tmp
 #	Invoca a las funciones encargadas de monitorear el directorio /tmp en busca de archivos sospechosos.

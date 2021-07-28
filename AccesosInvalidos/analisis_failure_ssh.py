@@ -1,10 +1,16 @@
+import datetime, subprocess, os, sys
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
 
-from Correo.correo import enviar_correo
-import datetime, subprocess, os
-from Logs.logs import echo_alarmas_log, echo_prevencion_log
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
-from AccesosInvalidos.analisis_accesos_invalidos import bloquear_ip
+sys.path.append( os.path.abspath('../Logs/')) 
+from logs import echo_alarmas_log, echo_prevencion_log
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
+
+sys.path.append( os.path.abspath('../AccesosInvalidos/'))
+from analisis_accesos_invalidos import bloquear_ip
 
 #Funcion: analisis_ssh
 #	Verifica si alguien ha intentado realizar un login a nuestra maquina via SSH y ha

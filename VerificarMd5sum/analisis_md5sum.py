@@ -1,9 +1,17 @@
-from Main.variables_globales import directorio_archivo_backup_hashes, md5_tmp_dir
-import subprocess, datetime
-from Logs.logs import echo_alarmas_log, echo_prevencion_log
-from Correo.correo import enviar_correo
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
+import subprocess, datetime, os, sys
+
+sys.path.append( os.path.abspath('../Main/'))
+from variables_globales import directorio_archivo_backup_hashes, md5_tmp_dir
+
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_alarmas_log, echo_prevencion_log
+
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
 
 #Funcion: verificar_md5sum
 #	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmaslog y echo_prevencionlog)

@@ -1,8 +1,12 @@
-import subprocess
-from Correo.correo import enviar_correo
-from BaseDatos.dao import AlarmaPrevencion, insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
-import datetime
+import subprocess, os, sys, datetime
+
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import AlarmaPrevencion, insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
+
 
 def comprobar_usuarios_conectados(admin):
     U_conectados = subprocess.Popen("w -i 2>/dev/null", stdout=subprocess.PIPE, shell=True)

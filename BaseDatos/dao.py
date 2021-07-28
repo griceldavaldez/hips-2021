@@ -1,5 +1,5 @@
-from BaseDatos.modelos import General, Md5sum, LimiteProceso, AlarmaPrevencion, AplicacionPeligrosa
-from BaseDatos.base_datos import conectar_postgres, cerrar_conexion
+from modelos import General, Md5sum, LimiteProceso, AlarmaPrevencion, AplicacionPeligrosa
+from base_datos import conectar_postgres, cerrar_conexion
 import psycopg2
 
 #CRUD PARA LA CLASE GENERAL

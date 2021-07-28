@@ -1,5 +1,4 @@
-from BaseDatos.base_datos import datos_conexion_postgres
-import datetime
+
 import subprocess
 
 #Funcion: echo_alarmaslog
