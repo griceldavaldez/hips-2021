@@ -9,7 +9,7 @@ from BaseDatos.modelos import AlarmaPrevencion
 #	Verifica si la cola de mails supero una cantidad maxima determinada
 #Parametros:
 #	MAX_Q_COUNT	(int) numero maximo de mails que pueden estar en cola
-#
+#   admin (lista) contiene los datos del administrador como el correo y pass
 def verificar_cola_correo(MAX_Q_COUNT, admin):
     p = subprocess.Popen("mailq", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
