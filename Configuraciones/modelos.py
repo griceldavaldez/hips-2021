@@ -1,4 +1,9 @@
-class Usuario(object):
+from flask_login import UserMixin
+
+
+
+class Usuario(db.Model, UserMixin):
+
     #Metodos para obtener los atributos de la clase
     def getNombre(self):
         return self.nombre
@@ -13,5 +18,9 @@ class Usuario(object):
         self.login = login 
     def setPassword(self, password):
         self.password = password 
+    def __init__(self, nombre, login, password):
+        self.nombre = nombre
+        self.login = login
+        self.password = password
     def __repr__(self):
-        return "<Usuario Nombre:%s Login:%s Password:%s>" % (self.nombre, self.login, self.password)
+        return "<Usuario Nombre:%s Login:%s>" % (self.nombre, self.login)

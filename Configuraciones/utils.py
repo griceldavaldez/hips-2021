@@ -1,5 +1,5 @@
 import os
-from modelos import Usuario
+from Configuraciones.modelos import Usuario
 
 #recibe una ruta relativa y devuele la ruta absoluta
 def obtenerRutaAbsoluta(ruta_relativa):
@@ -20,9 +20,8 @@ def obtenerUsuario(login):
         txt= lineas[i].split(";")
         loginObtenido = txt[1]
         if(loginObtenido == login):
-            usuario = Usuario()
-            usuario.setNombre(txt[0])
-            usuario.setLogin(txt[1])
-            usuario.setPassword(txt[2])
+            usuario = Usuario(txt[0],txt[1],txt[2])
             return usuario
     pass
+
+print(obtenerUsuario("gvaldez"))

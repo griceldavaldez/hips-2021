@@ -2,8 +2,9 @@
 from flask import Flask, render_template, redirect, url_for,request, flash, Blueprint
 from flask_login import current_user, login_user, logout_user, LoginManager
 from werkzeug.urls import url_parse
+from Configuraciones import utils
 
-from auth.forms import SignupForm, LoginForm
+from auth.forms import LoginForm
 
 from app.common.filters import format_datetime
 
@@ -46,7 +47,7 @@ def login():
         return redirect(url_for('public.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.get_by_email(form.email.data)
+        user = utils.obtenerUsuario(form.login.data)
         if user is not None and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next')
@@ -56,13 +57,13 @@ def login():
     return render_template('auth/login_form.html', form=form)
 
 
-.route('/logout')
+@app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('public.index'))
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    return User.get_by_id(int(user_id))
+def load_user(login):
+    return utils.obtenerUsuario(login)
 
