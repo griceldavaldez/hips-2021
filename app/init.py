@@ -1,42 +1,20 @@
 
-from flask_login import LoginManager
+# app/__init__.py
+
 from flask import Flask
-import os
+from config import app_config
 
-from app.common.filters import format_datetime
+def create_app(config_name):
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(app_config[config_name])
+    app.config.from_pyfile('config.py')
 
-login_manager = LoginManager()
-
-
-def create_app():
-    app = Flask(__name__)
-
-    login_manager.init_app(app)
-    login_manager.login_view = "auth.login"
-
-    # Registro de los filtros
-    register_filters(app)
-
-    # Registro de los Blueprints
-    from .auth import auth_bp
-    app.register_blueprint(auth_bp)
-
-    from .public import public_bp
-    app.register_blueprint(public_bp)
-    
-    app.config["SECRET_KEY"] = os.urandom(32)
+    @app.route("/")
+    def hello():
+        return "Hello world!"
 
     return app
 
 
-def register_filters(app):
-    app.jinja_env.filters['datetime'] = format_datetime
 
-
-app = create_app()
-
-
-@app.route("/")
-def hello():
-    return "Hello world!"
 
