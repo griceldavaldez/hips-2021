@@ -54,7 +54,7 @@ def verificar_smtp_maillog(maxmailpu, admin):
 #Funcion: verificar_smtp_messages
 #	Verifica si se produjeron multiples Authentication Errors hacia un mismo usuario.
 #	Lo hace revisando el archivo /var/log/messages
-#	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmaslog y echo_prevencionlog)
+#	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmas_log y echo_prevencion_log)
 def verificar_smtp_messages(maxmailpu, admin):
     counts = dict()
     p = subprocess.Popen("cat  /var/log/messages | grep -i \"[service=smtp]\" | grep -i \"auth failure\"", stdout=subprocess.PIPE, shell=True)
