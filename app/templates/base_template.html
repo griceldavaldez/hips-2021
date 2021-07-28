@@ -1,23 +1,30 @@
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for("static", filename="base.css") }}">
-</head>
-<body>
-<div>
+<!doctype html>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for("static", filename="base.css") }}">
+<!--
+<link rel="stylesheet" id="bootstrap-css" href="{{ url_for("static", filename="bootstrap-4.0.0/dist/css/bootstrap.min.css") }}">
+<script src="{{ url_for("static", filename="bootstrap-4.0.0/dist/js/bootstrap.min.js") }}"></script>
+<script src="{{ url_for("static", filename="jquery-3.6.0.min.js") }}"></script>
+-->
+<nav>
+    <h1><a href="{{ url_for('public.index') }}">Sistema de Prevenci&oacute;n de Intrusos</a></h1>
     <ul class="user-info">
-        <li><a href="{{ url_for('public.index') }}">Home</a></li>
+        <li><a  href="{{ url_for('public.index') }}">Home</a></li>
         {% if current_user.is_anonymous %}
             <li><a href="{{ url_for('auth.login') }}">Login</a></li>
         {% else %}
-            <li>{{ current_user.name }}</li>
+            <li>{{ current_user.nombre }}</li>
             <li> | </li>
-            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+            <li><a  class="nav-link"href="{{ url_for('auth.logout') }}">Logout</a></li>
         {% endif %}
     </ul>
-</div>
-{% block content %}{% endblock %}
-</body>
-</html>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
