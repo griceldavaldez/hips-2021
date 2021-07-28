@@ -6,3 +6,4 @@ directorio_secure = "/var/log /secure"
 directorio_messages = "/var/log/messages"
 directorio_access_log = "/var/log/httpd/access.log"
 directorio_maillog = "/var/log/maillog"
+md5_tmp_dir = '/tmp/so2hipshashes.md5'
