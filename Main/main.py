@@ -43,11 +43,12 @@ def main():
     MD5SUM_LISTA= preferencias['md5sum']
     general = preferencias['general']
     #se guardan las preferencias generales en variables individuales
-    MI_IP = general['ip']
-    ADMIN_DATOS = [general['correo_admin'], general['pass_admin']] #Contiene los datos como correo y pass del admin
-    MAX_Q_COUNT = general['cola_maxima_correo']
-    MAX_MAIL_PU = general['correo_maximo_por_usuario']
-    MAX_SSH = general['intento_maximo_ssh']
+    for i in general:
+        MI_IP = i['ip']
+        ADMIN_DATOS = [i['correo_admin'], i['pass_admin']] #Contiene los datos como correo y pass del admin
+        MAX_Q_COUNT = i['cola_maxima_correo']
+        MAX_MAIL_PU = i['correo_maximo_por_usuario']
+        MAX_SSH = i['intento_maximo_ssh']
     MAX_FUZZ = 5
     P_DIR = '/var/log/messages'
 
