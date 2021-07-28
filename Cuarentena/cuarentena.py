@@ -1,6 +1,6 @@
-from Main.variables_globales import directorio_cuarentena
-import subprocess
-
+import subprocess, os, sys
+sys.path.append( os.path.abspath('../Main/'))
+from variables_globales import directorio_cuarentena
 
 def enviar_a_cuarentena(s_archivo):
     global directorio_cuarentena

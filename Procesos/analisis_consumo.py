@@ -1,12 +1,18 @@
+import datetime, time, json, os, sys, psutil
 
-from Correo.correo import enviar_correo
-import psutil
-import datetime, time
-import json
-from Sniffers.analisis_promiscuo import matar_proceso
-from Logs.logs import echo_alarmas_log, echo_prevencion_log
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../Sniffers/'))
+from analisis_promiscuo import matar_proceso
+
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_alarmas_log, echo_prevencion_log
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
+
 #Funcion: analisis_consumo_procesos
 #	Verifica el consumo de recursos de cpu, memoria y tiempo de los procesos activos.
 #	En caso de encontrar algun proceso que sobrepase su valor de uso maximo lo alerta y lo mata.

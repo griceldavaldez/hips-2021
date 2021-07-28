@@ -1,9 +1,14 @@
-import datetime
+import datetime, os, sys
 import subprocess
-from Correo.correo import enviar_correo
-from Logs.logs import echo_prevencion_log, echo_alarmas_log
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_prevencion_log, echo_alarmas_log
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
 
 #Funcion: verificar_cola_correo
 #	Verifica si la cola de mails supero una cantidad maxima determinada

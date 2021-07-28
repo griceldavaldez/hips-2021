@@ -1,8 +1,13 @@
-import subprocess, datetime
-from Logs.logs import echo_alarmas_log, echo_prevencion_log
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
-from Correo.correo import enviar_correo
+import subprocess, datetime, os, sys
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_alarmas_log, echo_prevencion_log
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
+
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
 
 #Funcion: analisis_directorio_invalido
 #	Verifica si alguna maquina se encuentra realizando fuzzing. Luego de 5 intentos fallidos de

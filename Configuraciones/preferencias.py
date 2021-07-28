@@ -1,8 +1,11 @@
+import os, sys
+sys.path.append(os.path.abspath('../BaseDatos/'))
+from base_datos import conectar_postgres, cerrar_conexion
+from dao import actualizarMd5sum, obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
+from modelos import Md5sum
 
-from BaseDatos.base_datos import conectar_postgres, cerrar_conexion
-from BaseDatos.dao import actualizarMd5sum, obtenerAplicacionPeligrosa, obtenerMd5sum, obtenerLimiteProceso, obtenerGeneral
-from BaseDatos.modelos import Md5sum
-from VerificarMd5sum.analisis_md5sum import crear_md5sum_hash
+sys.path.append(os.path.abspath('../VerificarMd5sum/'))
+from analisis_md5sum import crear_md5sum_hash
 
 #Funcion: guardar_preferencias
 #	Guarda las preferencias/configuraciones del administrador en una lista

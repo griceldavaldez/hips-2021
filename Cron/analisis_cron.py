@@ -1,9 +1,14 @@
+import datetime, subprocess, os, sys
 
-from Correo.correo import enviar_correo
-import datetime, subprocess, os
-from Logs.logs import echo_alarmas_log
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_alarmas_log
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
 
 
 #Funcion: analsis_cron

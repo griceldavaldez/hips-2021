@@ -1,8 +1,13 @@
-from Correo.correo import enviar_correo
-import datetime, subprocess
-from Logs.logs import echo_alarmas_log
-from BaseDatos.dao import insertarAlarmaPrevencion
-from BaseDatos.modelos import AlarmaPrevencion
+import datetime, subprocess, os, sys
+sys.path.append( os.path.abspath('../Correo/'))
+from correo import enviar_correo
+
+sys.path.append( os.path.abspath('../Logs/'))
+from logs import echo_alarmas_log
+
+sys.path.append( os.path.abspath('../BaseDatos/'))
+from dao import insertarAlarmaPrevencion
+from modelos import AlarmaPrevencion
 
 #Funcion: analisis_auths_failure
 #	Busca Authentication Failures en /var/log/secure. En el caso de encontrarlas, los alerta.

@@ -1,17 +1,37 @@
-from Configuraciones.preferencias import guardar_preferencias
-import os, subprocess
-from Main.variables_globales import directorio_cuarentena
-from VerificarMd5sum.analisis_md5sum import verificar_md5sum
-from VerificarTmp.analisis_tmp import analisis_tmp
-from UsuariosConectados.usuarios_conectados import comprobar_usuarios_conectados
-from Correo.cola_correo import verificar_cola_correo
-from AtaqueSmtp.analisis_ataque_smtp import analisis_ataque_smtp
-from Sniffers.analisis_promiscuo import analisis_promiscuo
-from Procesos.analisis_consumo import analisis_consumo_procesos
-from AccesosInvalidos.analisis_accesos_invalidos import analisis_directorio_invalido
-from AccesosInvalidos.analisis_auths_failure import analisis_auths_failure
-from AccesosInvalidos.analisis_failure_ssh import analisis_failure_ssh
-from Cron.analisis_cron import analsis_cron
+import os, sys, subprocess
+sys.path.append(os.path.abspath('../Configuraciones/'))
+from preferencias import guardar_preferencias
+
+from variables_globales import directorio_cuarentena
+
+sys.path.append(os.path.abspath('../VerificarMd5sum/'))
+from analisis_md5sum import verificar_md5sum
+
+sys.path.append( os.path.abspath('../VerificarTmp/'))
+from analisis_tmp import analisis_tmp
+
+sys.path.append( os.path.abspath('../UsuariosConectados/'))
+from usuarios_conectados import comprobar_usuarios_conectados
+
+sys.path.append( os.path.abspath('../Correo/'))
+from cola_correo import verificar_cola_correo
+
+sys.path.insert(0, os.path.abspath('../AtaqueSmtp/'))
+from analisis_ataque_smtp import analisis_ataque_smtp
+
+sys.path.append( os.path.abspath('../Sniffers/'))
+from analisis_promiscuo import analisis_promiscuo
+
+sys.path.append( os.path.abspath('../Procesos/'))
+from analisis_consumo import analisis_consumo_procesos
+
+sys.path.append( os.path.abspath('../AccesosInvalidos/'))
+from analisis_accesos_invalidos import analisis_directorio_invalido
+from analisis_auths_failure import analisis_auths_failure
+from analisis_failure_ssh import analisis_failure_ssh
+
+sys.path.append( os.path.abspath('../Cron/'))
+from analisis_cron import analsis_cron
 
 #Funcion: main
 #	Invoca a todas las funciones necesarias para el HIPS repitiendose cada x intervalo de tiempo
@@ -23,11 +43,12 @@ def main():
     MD5SUM_LISTA= preferencias['md5sum']
     general = preferencias['general']
     #se guardan las preferencias generales en variables individuales
-    MI_IP = general['ip']
-    ADMIN_DATOS = [general['correo_admin'], general['pass_admin']] #Contiene los datos como correo y pass del admin
-    MAX_Q_COUNT = general['cola_maxima_correo']
-    MAX_MAIL_PU = general['correo_maximo_por_usuario']
-    MAX_SSH = general['intento_maximo_ssh']
+    for i in general:
+        MI_IP = i['ip']
+        ADMIN_DATOS = [i['correo_admin'], i['pass_admin']] #Contiene los datos como correo y pass del admin
+        MAX_Q_COUNT = i['cola_maxima_correo']
+        MAX_MAIL_PU = i['correo_maximo_por_usuario']
+        MAX_SSH = i['intento_maximo_ssh']
     MAX_FUZZ = 5
     P_DIR = '/var/log/messages'
 
