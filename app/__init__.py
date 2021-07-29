@@ -23,9 +23,6 @@ def create_app(config_name):
 
     Bootstrap(app)
 
-    from Configuraciones import modelos_conf
-    from BaseDatos import modelos
-
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 

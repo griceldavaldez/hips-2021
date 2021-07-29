@@ -3,13 +3,12 @@
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from Configuraciones import utils
+import utils
 
-from app.init import login_manager
+from app import login_manager
 
 from . import auth
-from forms import LoginForm
-from Configuraciones.modelos_conf import Usuario
+from .forms import LoginForm
 
 
 @auth.route('/login', methods=['GET', 'POST'])
