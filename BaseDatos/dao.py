@@ -1,7 +1,8 @@
-from modelos import General, Md5sum, LimiteProceso, AlarmaPrevencion, AplicacionPeligrosa
-from base_datos import conectar_postgres, cerrar_conexion
-import psycopg2
-from VerificarMd5sum.analisis_md5sum import crear_md5sum_hash
+from BaseDatos.modelos import General, Md5sum, LimiteProceso, AlarmaPrevencion, AplicacionPeligrosa
+from BaseDatos.base_datos import conectar_postgres, cerrar_conexion
+import psycopg2, subprocess
+#from VerificarMd5sum.analisis_md5sum import crear_md5sum_hash
+from variables_globales import directorio_archivo_backup_hashes
 
 #CRUD PARA LA CLASE GENERAL
 #Lista las configuraciones generales del administrador
@@ -216,6 +217,7 @@ def obtenerAlarmaPrevencion():
 def insertarAlarmaPrevencion(obj_alarm_prev):
     try:
         dbConexion, dbCursor = conectar_postgres()
+        
         insert_alarma_prevencion = "INSERT INTO alarma_prevencion(fecha_hora,tipo_escaneo,resultado,accion) values('{}','{}','{}','{}');"
         dbCursor.execute(insert_alarma_prevencion.format(obj_alarm_prev.getFechaHora(), obj_alarm_prev.getTipoEscaneo(),obj_alarm_prev.getResultado(), obj_alarm_prev.getAccion()))
         dbConexion.commit()
@@ -224,3 +226,22 @@ def insertarAlarmaPrevencion(obj_alarm_prev):
         print("Motivo:  ", error)
     finally:
         cerrar_conexion(dbConexion, dbCursor)
+
+
+
+#Funcion: crear_md5sum_hash
+#	Crea un hash md5sum utilizando la funcion md5sum para un archivo en especifico
+#	Realiza una copia de seguridad del archivo en el directorio directorio_archivo_backup_hashes
+#Parametros:
+#	dir_str	(string) ruta absoluta del archivo al cual queremos crearle un hash md5sum.
+#Retorna:
+#	(string) el hash producido
+def crear_md5sum_hash(dir_str):
+    p =subprocess.Popen("cp -R "+dir_str+" "+directorio_archivo_backup_hashes+"/", stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    p =subprocess.Popen("md5sum "+dir_str, stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    var = str(output.decode("utf-8")[:-1])
+    #var = var.strip(" {}".format(directorio_string))
+    return  var 
+
