@@ -1,11 +1,6 @@
-<<<<<<< HEAD:Main/main.py
 import os, sys, subprocess
 from preferencias import guardar_preferencias
 
-=======
-import subprocess, os
-from Configuraciones.preferencias import guardar_preferencias
->>>>>>> main:main.py
 from variables_globales import directorio_cuarentena
 from VerificarMd5sum.analisis_md5sum import verificar_md5sum
 from VerificarTmp.analisis_tmp import analisis_tmp
