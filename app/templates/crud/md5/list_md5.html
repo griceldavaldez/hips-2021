@@ -1,0 +1,52 @@
+{% import "bootstrap/utils.html" as utils %} {% extends "base.html" %} {% block title %}{{label}}{% endblock %} {% block body %}
+<div class="content-section">
+    <div class="outer">
+        <div class="middle">
+            <div class="inner">
+                <br/> {{ utils.flashed_messages() }}
+                <br/>
+                <h1 style="text-align:center;">{{label}}</h1>
+                {% if lista_valores %}
+                <hr class="intro-divider">
+                <div class="center">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="70%"> Directorio </th>
+                                <th width="15%"> Editar </th>
+                                <th width="15%"> Eliminar </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for valor in lista_valores %}
+                            <tr>
+                                <td> {{ valor.directorio }} </td>
+                                <td>
+                                    <a href="{{ url_for('crud.edit_md5', id=valor.id) }}">
+                                        <i class="fa fa-pencil"></i> Editar
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('crud.delete_md5', id=valor.id) }}">
+                                        <i class="fa fa-trash"></i> Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center">
+                    {% else %}
+                    <div style="text-align: center">
+                        <h3> No se encontraron registros de {{label}}. </h3>
+                        <hr class="intro-divider"> {% endif %}
+                        <a href="{{ url_for('crud.add_md5') }}" class="btn btn-default btn-lg">
+                            <i class="fa fa-plus"></i> Agregar {{label}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

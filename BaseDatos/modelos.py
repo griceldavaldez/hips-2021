@@ -4,7 +4,8 @@
 #tabla general
 class General(object):
     #Constructor de la clase
-    def __init__(self, ip4, admin_e, passw, max_cpu, max_mem, max_ssh, max_pu, max_eq):
+    def __init__(self, id, ip4, admin_e, passw, max_cpu, max_mem, max_ssh, max_pu, max_eq):
+        self.id = id
         self.ip = ip4
         self.correo = admin_e
         self.contrasenha_correo = passw
@@ -14,6 +15,8 @@ class General(object):
         self.correo_maximo_por_usuario = max_pu
         self.cola_maxima_correo = max_eq
     #Metodos para obtener los atributos de la clase
+    def getId(self):
+        return self.id
     def getIP(self):
         return self.ip
     def getCorreo (self):
@@ -31,6 +34,8 @@ class General(object):
     def getColaMaximaCorreo(self):
         return self.cola_maxima_correo
     #Metodos para setear los atributos de la clase
+    def setId(self, id):
+        self.id = id
     def setIP(self, ip4):
         self.ip = ip4
     def setCorreo (self, email):
@@ -52,15 +57,20 @@ class General(object):
 #tabla md5sum
 class Md5sum(object):
     #Constructor de la clase
-    def __init__(self, dir, hash):
+    def __init__(self, id, dir, hash):
+        self.id = id
         self.directorio = dir
         self.hash = hash
     #Metodos para obtener los atributos de la clase
+    def getId(self):
+        return self.id
     def getDirectorio(self):
         return self.directorio
     def getHash(self):
         return self.hash
     #Metodos para setear los atributos de la clase
+    def setId(self, id):
+        self.id = id
     def setDirectorio(self, dir):
         self.directorio = dir
     def setHash(self, hash):
@@ -70,12 +80,17 @@ class Md5sum(object):
 #tabla aplicacion_peligrosa
 class AplicacionPeligrosa(object): 
     #Constructor de la clase
-    def __init__(self, app_pelig):
+    def __init__(self, id, app_pelig):
+        self.id = id
         self.nombre_sniffer = app_pelig
     #Metodos para obtener los atributos de la clase
+    def getId(self):
+        return self.id
     def getNombreSniffer(self):
         return self.nombre_sniffer
     #Metodos para setear los atributos de la clase
+    def setId(self, id):
+        self.id = id
     def setNombreSniffer(self, name):
         self.nombre_sniffer = name
 
@@ -83,12 +98,15 @@ class AplicacionPeligrosa(object):
 #tabla limite_procesos
 class LimiteProceso(object):
     #Constructor de la clase
-    def __init__(self, nombre, max_cpu, max_mem, max_time):
+    def __init__(self, id, nombre, max_cpu, max_mem, max_time):
+        self.id = id
         self.nombre_proceso = nombre
         self.uso_cpu = max_cpu
         self.uso_memoria = max_mem
         self.tiempo_maximo_ejecucion = max_time
     #Metodos para obtener los atributos de la clase
+    def getId(self):
+        return self.id
     def getNombreProceso(self):
         return self.nombre_proceso 
     def getUsoCpu(self):
@@ -98,6 +116,8 @@ class LimiteProceso(object):
     def getTiempoMaximoEjecucion(self):
         return self.tiempo_maximo_ejecucion
     #Metodos para setear los atributos de la clase
+    def setId(self, id):
+        self.id = id
     def setNombreProceso(self, name_p):
         self.nombre_proceso = name_p
     def setUsoCpu(self, cpu):
@@ -111,12 +131,15 @@ class LimiteProceso(object):
 #tabla alarma_prevencion
 class AlarmaPrevencion(object):
     #Constructor de la clase
-    def __init__(self, timestamp, t_scan, res, acc):
+    def __init__(self, id, timestamp, t_scan, res, acc):
+        self.id = id
         self.fecha_hora = timestamp
         self.tipo_escaneo = t_scan
         self.resultado = res
         self.accion = acc
     #Metodos para obtener los atributos de la clase
+    def getId(self):
+        return self.id
     def getFechaHora(self):
         return self.fecha_hora
     def getTipoEscaneo(self):
@@ -126,6 +149,8 @@ class AlarmaPrevencion(object):
     def getAccion(self):
         return self.accion
     #Metodos para setear los atributos de la clase
+    def setId(self, id):
+        self.id = id
     def setFechaHora(self, date):
         self.fecha_hora = date
     def setTipoEscaneo(self, t_scan):

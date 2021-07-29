@@ -29,6 +29,9 @@ def create_app(config_name):
     from .home import home as home_blueprint
     app.register_blueprint(home_blueprint)
 
+    from .crud import crud as crud_blueprint
+    app.register_blueprint(crud_blueprint)
+
     @app.route("/")
     def hello():
         return "Hello world!"

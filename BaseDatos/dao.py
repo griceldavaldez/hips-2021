@@ -51,6 +51,21 @@ def obtenerMd5sum():
         cerrar_conexion(dbConexion, dbCursor)
     return datos_lista
 
+#Lista todos los registros de la tabla md5sum 
+def obtenerMd5sumPorId(id):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        select_md5sum = "SELECT * FROM md5sum where id='{}';"
+        dbCursor.execute(select_md5sum.format(id))
+        datos = dbCursor.fetchone()
+        obj_md5sum = Md5sum(datos[0], datos[1], datos[2])
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion obtenerMd5sumPorId()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+    return obj_md5sum
+
 #Inserta los directorios junto con sus hashes en la tabla md5sum. Recibe como parametro el obj Md5sum.directorio
 def insertarMd5sum(obj_md5sum):
     try:
@@ -64,6 +79,19 @@ def insertarMd5sum(obj_md5sum):
     finally:
         cerrar_conexion(dbConexion, dbCursor)
 
+#Actualiza los directorios junto con sus hashes en la tabla md5sum. Recibe como parametro el obj Md5sum.directorio
+def actualizarMd5sum(obj_md5sum):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        update_md5sum = "update md5sum set directorio='{}', hash = '{}' where id = '{}';"
+        dbCursor.execute(update_md5sum.format(obj_md5sum.getDirectorio(), crear_md5sum_hash(obj_md5sum.getDirectorio()),obj_md5sum.getId()))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion actualizarMd5sum()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
 #Elimina un registro de la tabla md5sum dado su Md5sum.directorio
 def eliminarMd5sum(obj_md5sum):
     try:
@@ -73,6 +101,19 @@ def eliminarMd5sum(obj_md5sum):
         dbConexion.commit()
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion eliminarMd5sum()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Elimina un registro de la tabla md5sum dado su id
+def eliminarMd5sumPorId(id):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        delete_md5sum =  "DELETE FROM md5sum where id = '{}';"
+        dbCursor.execute(delete_md5sum.format(id))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion eliminarMd5sumPorId()")
         print("Motivo:  ", error)
     finally:
         cerrar_conexion(dbConexion, dbCursor)
