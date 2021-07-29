@@ -1,14 +1,9 @@
+from Configuraciones.utils import get_fecha
 import random, subprocess, string, datetime, os, sys
-sys.path.append( os.path.abspath('../BaseDatos/'))
-from dao import insertarAlarmaPrevencion
-from modelos import AlarmaPrevencion
-
-sys.path.append( os.path.abspath('../Correo/'))
-from correo import enviar_correo
-
-sys.path.append( os.path.abspath('../Logs/'))
-from logs import echo_alarmas_log, echo_prevencion_log
-
+from BaseDatos.dao import insertarAlarmaPrevencion
+from BaseDatos.modelos import AlarmaPrevencion
+from Correo.correo import enviar_correo
+from Logs.logs import echo_alarmas_log, echo_prevencion_log
 
 #Funcion: analisis_ataque_smtp
 #	Invoca a las funciones que buscan patrones de un posible ataque SMTP.
@@ -24,11 +19,11 @@ def analisis_ataque_smtp(maxmailpu, admin):
 #	y de ser asi lo pone en una lista negra y alerta. Lo hace revisando el archivo /var/log/maillog
 #	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmas_log y echo_prevencion_log)
 def verificar_smtp_maillog(maxmailpu, admin):
+    print("Inicia la funcion verificar_smtp_maillog() \n", "\t\t Fecha: " + get_fecha())
     counts = dict()
     p = subprocess.Popen("cat  /var/log/maillog | grep -i authid", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     ret_msg = output.decode("utf-8")
-    fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     body = ''
     for linea in ret_msg.splitlines():
         correo = linea.split(' ')[-3]
@@ -46,13 +41,11 @@ def verificar_smtp_maillog(maxmailpu, admin):
     for key in counts:
         aux = counts[key]
         if aux >= maxmailpu and maxmailpu >=0:
-            echo_alarmas_log(fecha_hora, str(aux)+" correos electronicos enviados usando "+key, 'analisis_ataque_smtp','')
-            echo_prevencion_log(fecha_hora, key+" se agrego a la lista negra de correos electronicos de Postfix", "Ataque SMTP")
-            obj_alarm_prev = AlarmaPrevencion()
-            obj_alarm_prev.setFechaHora(fecha_hora)
-            obj_alarm_prev.setTipoEscaneo('analisis_ataque_smtp')
-            obj_alarm_prev.setResultado("Ataque SMTP. " + str(aux)+" correos electronicos enviados usando "+key)
-            obj_alarm_prev.setAccion(key+" se agrego a la lista negra de correos electronicos de Postfix")
+            echo_alarmas_log(str(aux)+" correos electronicos enviados usando "+key, 'analisis_ataque_smtp','')
+            print(print("\t\t Resultado: " + "Ataque SMTP. " + str(aux)+" correos electronicos enviados usando "+key))
+            echo_prevencion_log( key+" se agrego a la lista negra de correos electronicos de Postfix", "Ataque SMTP")
+            print("\t\t Accion: " + key+" se agrego a la lista negra de correos electronicos de Postfix")
+            obj_alarm_prev = AlarmaPrevencion(get_fecha(),'analisis_ataque_smtp.maillog', "Ataque SMTP. " + str(aux)+" correos electronicos enviados usando "+key, key+" se agrego a la lista negra de correos electronicos de Postfix")
             insertarAlarmaPrevencion(obj_alarm_prev)
             
 
@@ -61,13 +54,13 @@ def verificar_smtp_maillog(maxmailpu, admin):
 #	Lo hace revisando el archivo /var/log/messages
 #	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmas_log y echo_prevencion_log)
 def verificar_smtp_messages(maxmailpu, admin):
+    print("Inicia la funcion verificar_smtp_messages() \n", "\t\t Fecha: " + get_fecha())
     counts = dict()
     p = subprocess.Popen("cat  /var/log/messages | grep -i \"[service=smtp]\" | grep -i \"auth failure\"", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     ret_msg = output.decode("utf-8")
     body = ''
     nuevo_pass = ''
-    fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for linea in ret_msg.splitlines():
         usuario = linea.split('=')[1] #conseguimos condorito] [service
         usuario = usuario.split(']')[0] #aislamos el username del string anterior
@@ -87,28 +80,26 @@ def verificar_smtp_messages(maxmailpu, admin):
     for key in counts:
         aux = counts[key]
         if aux >= maxmailpu and maxmailpu >=0:
-            echo_alarmas_log(fecha_hora, str(aux)+" fallos de autenticacion para "+key, 'analisis_ataque_smtp','')
-            echo_prevencion_log(fecha_hora, "Fallo de autenticacion SMTP usando: " + body + "Se cambiaron todas las contraseñas", "Ataque SMTP" )
-            obj_alarm_prev = AlarmaPrevencion()
-            obj_alarm_prev.setFechaHora(fecha_hora)
-            obj_alarm_prev.setTipoEscaneo('analisis_ataque_smtp')
-            obj_alarm_prev.setResultado("Ataque SMTP"+ "Fallo de autenticacion SMTP usando: " + body.strip('\n') )
-            obj_alarm_prev.setAccion("Se cambiaron todas las contraseñas de los usuarios involucrados")
+            echo_alarmas_log(str(aux)+" fallos de autenticacion para "+key, 'analisis_ataque_smtp','')
+            print("\t\t Resultado: " + "Ataque SMTP."+ "Fallo de autenticacion SMTP usando: " + body.replace('\n', ' '))
+            echo_prevencion_log("Fallo de autenticacion SMTP usando: " + body + "Se cambiaron todas las contraseñas", "Ataque SMTP" )
+            print("\t\t Accion: " + "Se cambiaron todas las contraseñas de los usuarios involucrados")
+            obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_ataque_smtp.messages',"Ataque SMTP."+ "Fallo de autenticacion SMTP usando: " + body.replace('\n', ' '), "Se cambiaron todas las contraseñas de los usuarios involucrados" )
             insertarAlarmaPrevencion(obj_alarm_prev)
 
 
 #Funcion: verificar_smtp_secure
 #	Verifica si se produjeron multiples Authentication Errors hacia un mismo usuario.
 #	Lo hace revisando el archivo /var/log/secure
-#	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmaslog y echo_prevencionlog)
+#	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmas_log y echo_prevencion_log)
 def verificar_smtp_secure(maxmailpu, admin):
+    print("Inicia la funcion verificar_smtp_secure() \n", "\t\t Fecha: " + get_fecha())
     counts = dict()
     p = subprocess.Popen("cat  /var/log/secure | grep -i \"(smtp:auth)\" | grep -i \"authentication failure\"", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     ret_msg = output.decode("utf-8")
     body = ''
     nuevo_pass = ''
-    fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for linea in ret_msg.splitlines():
         usuario = linea.split('=')[-1] #conseguimos el username condorito
         if usuario in counts:
@@ -127,25 +118,23 @@ def verificar_smtp_secure(maxmailpu, admin):
     for key in counts:
         aux = counts[key]
         if aux >= maxmailpu and maxmailpu >=0:
-            echo_alarmas_log(fecha_hora, str(aux)+" fallos de autenticacion para "+key, 'analisis_ataque_smtp','')
-            echo_prevencion_log(fecha_hora, "Error masivo de autenticación de usuario SMTP usando: " + body.strip('\n') + "Se cambiaron todas las contraseñas", "Ataque SMTP")
-            obj_alarm_prev = AlarmaPrevencion()
-            obj_alarm_prev.setFechaHora(fecha_hora)
-            obj_alarm_prev.setTipoEscaneo('analisis_ataque_smtp')
-            obj_alarm_prev.setResultado("Ataque SMTP. "+ "Error masivo de autenticación de usuario SMTP usando: " + body.strip('\n'))
-            obj_alarm_prev.setAccion("Se cambiaron todas las contraseñas de los usuarios involucrados")
+            echo_alarmas_log(str(aux)+" fallos de autenticacion para "+key, 'analisis_ataque_smtp','')
+            print("\t\t Resultado: " + "Ataque SMTP. "+ "Error masivo de autenticación de usuario SMTP usando: " + body.replace('\n', ' ') )
+            echo_prevencion_log("Error masivo de autenticación de usuario SMTP usando: " + body.strip('\n') + "Se cambiaron todas las contraseñas", "Ataque SMTP")
+            print("\t\t Accion: " + "Se cambiaron todas las contraseñas de los usuarios involucrados" )
+            obj_alarm_prev = AlarmaPrevencion(get_fecha(),'analisis_ataque_smtp.secure', "Ataque SMTP. "+ "Error masivo de autenticación de usuario SMTP usando: " + body.replace('\n', ' '), "Se cambiaron todas las contraseñas de los usuarios involucrados")
             insertarAlarmaPrevencion(obj_alarm_prev)
 
 
 #Funcion: get_random_string
-#	genera un string con caraacteres aleatorios de longitud l
+#	genera un string con caracteres aleatorios de longitud l
 #Parametros:
 #		len	(int) longitud de la cadena deseada.
 #Retorna:
 #		new_str	(string) la cadena de caracteres generada
 def get_random_string(len):
-    letters = string.ascii_letters + "1234567890!@#$%^&*()-_=+"
-    nuevo_str = ''.join(random.choice(letters) for i in range(len))
+    letras = string.ascii_letters + "1234567890!@#$%^&*()-_=+"
+    nuevo_str = ''.join(random.choice(letras) for i in range(len))
     return (nuevo_str)
 
 
