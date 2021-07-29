@@ -3,6 +3,16 @@
 
 #tabla general
 class General(object):
+    #Constructor de la clase
+    def __init__(self, ip4, admin_e, passw, max_cpu, max_mem, max_ssh, max_pu, max_eq):
+        self.ip = ip4
+        self.correo = admin_e
+        self.contrasenha_correo = passw
+        self.uso_cpu_por_defecto = max_cpu
+        self.uso_memoria_por_defecto = max_mem
+        self.intento_maximo_ssh = max_ssh
+        self.correo_maximo_por_usuario = max_pu
+        self.cola_maxima_correo = max_eq
     #Metodos para obtener los atributos de la clase
     def getIP(self):
         return self.ip
@@ -38,8 +48,13 @@ class General(object):
     def setColaMaximaCorreo(self, q_max_email):
         self.cola_maxima_correo = q_max_email
 
+
 #tabla md5sum
 class Md5sum(object):
+    #Constructor de la clase
+    def __init__(self, dir, hash):
+        self.directorio = dir
+        self.hash = hash
     #Metodos para obtener los atributos de la clase
     def getDirectorio(self):
         return self.directorio
@@ -51,8 +66,12 @@ class Md5sum(object):
     def setHash(self, hash):
         self.hash = hash 
 
+
 #tabla aplicacion_peligrosa
 class AplicacionPeligrosa(object): 
+    #Constructor de la clase
+    def __init__(self, app_pelig):
+        self.nombre_sniffer = app_pelig
     #Metodos para obtener los atributos de la clase
     def getNombreSniffer(self):
         return self.nombre_sniffer
@@ -63,6 +82,12 @@ class AplicacionPeligrosa(object):
 
 #tabla limite_procesos
 class LimiteProceso(object):
+    #Constructor de la clase
+    def __init__(self, nombre, max_cpu, max_mem, max_time):
+        self.nombre_proceso = nombre
+        self.uso_cpu = max_cpu
+        self.uso_memoria = max_mem
+        self.tiempo_maximo_ejecucion = max_time
     #Metodos para obtener los atributos de la clase
     def getNombreProceso(self):
         return self.nombre_proceso 
@@ -85,6 +110,12 @@ class LimiteProceso(object):
 
 #tabla alarma_prevencion
 class AlarmaPrevencion(object):
+    #Constructor de la clase
+    def __init__(self, timestamp, t_scan, res, acc):
+        self.fecha_hora = timestamp
+        self.tipo_escaneo = t_scan
+        self.resultado = res
+        self.accion = acc
     #Metodos para obtener los atributos de la clase
     def getFechaHora(self):
         return self.fecha_hora
@@ -97,8 +128,8 @@ class AlarmaPrevencion(object):
     #Metodos para setear los atributos de la clase
     def setFechaHora(self, date):
         self.fecha_hora = date
-    def setTipoEscaneo(self, scan_t):
-        self.tipo_escaneo = scan_t
+    def setTipoEscaneo(self, t_scan):
+        self.tipo_escaneo = t_scan
     def setResultado(self, res):
         self.resultado = res
     def setAccion(self, acc):

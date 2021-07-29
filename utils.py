@@ -1,7 +1,16 @@
 import os
+<<<<<<< HEAD:utils.py
 
 from modelos_conf import Usuario
 
+=======
+from Configuraciones.modelos2 import Usuario
+import datetime
+
+#Retorna hora y fecha actual
+def get_fecha():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+>>>>>>> main:Configuraciones/utils.py
 
 #recibe una ruta relativa y devuele la ruta absoluta
 def obtenerRutaAbsoluta(ruta_relativa):
