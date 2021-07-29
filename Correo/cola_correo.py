@@ -1,4 +1,4 @@
-from Configuraciones.utils import get_fecha
+from utils import get_fecha
 import subprocess
 from Correo.correo import enviar_correo
 from Logs.logs import echo_prevencion_log, echo_alarmas_log

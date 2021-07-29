@@ -1,4 +1,4 @@
-import os
+import os, datetime
 
 from modelos_conf import Usuario
 
@@ -36,4 +36,6 @@ def obtenerUsuarioPorId(id):
             return usuario
     pass
 
-print("hola mundo")
+def get_fecha():
+    fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") 
+    return fecha_hora
