@@ -1,6 +1,6 @@
 
 import subprocess
-from Configuraciones.utils import get_fecha
+from utils import get_fecha
 
 #Funcion: echo_alarmas_log
 #	Escribe en el log /var/log/hips/alarmas.log la alarma registrada.
