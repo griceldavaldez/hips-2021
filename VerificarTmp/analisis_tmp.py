@@ -1,17 +1,10 @@
-import subprocess, datetime, os, sys
-
-sys.path.append( os.path.abspath('../Cuarentena/'))
-from cuarentena import enviar_a_cuarentena
-
-sys.path.append( os.path.abspath('../Logs/'))
-from logs import echo_alarmas_log, echo_prevencion_log
-
-sys.path.append( os.path.abspath('../Correo/'))
-from correo import enviar_correo
-
-sys.path.append( os.path.abspath('../BaseDatos/'))
-from modelos import AlarmaPrevencion
-from dao import insertarAlarmaPrevencion
+import subprocess
+from Cuarentena.cuarentena import enviar_a_cuarentena
+from Logs.logs import echo_alarmas_log, echo_prevencion_log
+from Correo.correo import enviar_correo
+from BaseDatos.modelos import AlarmaPrevencion
+from BaseDatos.dao import insertarAlarmaPrevencion
+from utils import get_fecha
 
 
 #Funcion: analisis_tmp
@@ -32,6 +25,7 @@ def analisis_tmp(admin):
 #	DIR	(string) absolute path del directorio donde se buscaran los shells. Normalmente es /tmp
 #    admin (lista) lista con los datos del administrador para enviar correo
 def buscar_shells(DIR, admin):
+    print("Inicia la funcion buscar_shells() \n", "\t\t Hora: " + get_fecha())
     msg = ''
     p = subprocess.Popen("find "+DIR+" -type f", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
@@ -41,7 +35,6 @@ def buscar_shells(DIR, admin):
         (output, err) = cat.communicate()
         txt = output.decode("utf-8")
         if(txt !=''):
-            fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") # la hora en que se hizo el escaneo
             msg += 'Se encontro un posible script de shell en:' + linea + '\n'
             enviar_a_cuarentena(linea)
             #print ('Se encontró un posible script de shell en:' + linea + "-> Archivo enviado a cuarentena. \ n")
