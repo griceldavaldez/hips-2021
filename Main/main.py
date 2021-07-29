@@ -46,6 +46,8 @@ def main():
     for i in general:
         MI_IP = i['ip']
         ADMIN_DATOS = [i['correo_admin'], i['pass_admin']] #Contiene los datos como correo y pass del admin
+        MAXCPU = i['MAXCPU']
+        MAXMEM = i['MAXMEM']
         MAX_Q_COUNT = i['cola_maxima_correo']
         MAX_MAIL_PU = i['correo_maximo_por_usuario']
         MAX_SSH = i['intento_maximo_ssh']
@@ -63,11 +65,24 @@ def main():
     (output, err) = p.communicate()
 
     #si no se cargaron las configuraciones personalizadas, se cargan los valores por defecto
-    if LIMIT_PROCESOS['uso_cpu'] is None or LIMIT_PROCESOS['uso_cpu'] == '': 
-        LIMIT_PROCESOS['uso_cpu'] = general['MAXCPU']
+    for i in LIMIT_PROCESOS:
+        if i['uso_cpu'] is None or i['uso_cpu'] == '': 
+            i['uso_cpu'] = MAXCPU
 
-    if LIMIT_PROCESOS['uso_memoria'] is None or LIMIT_PROCESOS['uso_memoria'] == '':
-        LIMIT_PROCESOS['uso_memoria'] = general['MAXMEM']
+        if i['uso_memoria'] is None or i['uso_memoria'] == '':
+            i['uso_memoria'] = MAXMEM
+    
+    for i in LIMIT_PROCESOS:
+        print(i)
+        if i['uso_cpu'] is None or i['uso_cpu'] == '':
+            print("Entro aca")
+            i['uso_cpu'] = MAXCPU
+
+        if i['uso_memoria'] is None or i['uso_memoria'] == '':
+            print("Entro aca")
+            i['uso_memoria'] = MAXMEM
+    print(LIMIT_PROCESOS)
+
   
 
     print("\n-------------------------\n\nESCANEANDO...\n\n-------------------------")

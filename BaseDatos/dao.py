@@ -97,7 +97,6 @@ def eliminarGeneral():
     finally:
         cerrar_conexion(dbConexion, dbCursor)
 
-
 #CRUD PARA LA CLASE Md5SUM
 #Lista los registros de la tabla md5sum segun el directorio y/o hash
 def obtenerMd5sum(dir, hash):
