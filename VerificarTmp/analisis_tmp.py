@@ -37,18 +37,15 @@ def buscar_shells(DIR, admin):
         if(txt !=''):
             msg += 'Se encontro un posible script de shell en:' + linea + '\n'
             enviar_a_cuarentena(linea)
-            #print ('Se encontró un posible script de shell en:' + linea + "-> Archivo enviado a cuarentena. \ n")
-            echo_alarmas_log( fecha_hora, "Shell encontrado" + linea, "analisis_tmp()", "")
-            echo_prevencion_log(fecha_hora, "Archivo" + linea + "movido a carpeta de cuarentena", "Shell encontrado en "+ DIR)
+            echo_alarmas_log("Shell encontrado" + linea, "analisis_tmp.shells", "")
+            print("\t\t Resultado: " + "Shell encontrado" + linea)
+            echo_prevencion_log( "Archivo" + linea + "movido a carpeta de cuarentena", "Shell encontrado en "+ DIR)
+            print("\t\t Accion: " + "Archivo" + linea + "movido a carpeta de cuarentena")
     if msg!='':
         body = msg +"\nTodos los archivos se enviaron a cuarentena."
         enviar_correo(admin[0], admin[1], 'Tipo de alerta: Shells encontrados',body) # se envia el correo
         #se registra los resultados en la base de datos
-        obj_alarm_prev = AlarmaPrevencion()
-        obj_alarm_prev.setFechaHora(fecha_hora)
-        obj_alarm_prev.setTipoEscaneo('analisis_tmp')
-        obj_alarm_prev.setResultado("Shells encontrados en " +DIR+  " : " + linea)
-        obj_alarm_prev.setAccion("Todos los archivos se enviaron a cuarentena")
+        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_tmp.shells', msg.replace("\n", " "), "Todos los archivos se enviaron a cuarentena")
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 
@@ -56,12 +53,12 @@ def buscar_shells(DIR, admin):
 #	Inspecciona las terminaciones de los archivos dentro de un directorio (de forma recursiva con find)
 #	buscando terminaciones clasicas de scripts (ejemplo: .py, .c, .exe, etc).
 #	Si los encuentra, alerta y mueve el archivo al directorio de cuarentena.
-#	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmaslog y echo_prevencionlog)
+#	Guarda las alertas y las precauciones tomadas en los log correspondientes (Ver: echo_alarmas_log y echo_prevencion_log)
 #Parametros:
 #	DIR	(string) absolute path del directorio donde se buscaran los scripts. Normalmente es /tmp
 #   admin (lista) lista con los datos del administrador para enviar correo
-
 def buscar_scripts(DIR, admin):
+    print("Inicia la funcion buscar_scripts() \n", "\t\t Hora: " + get_fecha())
     exten = ['py','c','cpp','ruby','sh','exe','php','java','pl']
     cmd = "find "+DIR+" -type f "
     for e in exten:
@@ -74,17 +71,13 @@ def buscar_scripts(DIR, admin):
     scripts = output.decode("utf-8")
     body = body + scripts
     if body!='':
-        fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") 
         for linea in scripts.splitlines():
             enviar_a_cuarentena(linea)
-            print ('Se encontró un posible script en:' + linea+  "-> Archivo enviado a cuarentena. \n")
-            echo_alarmas_log(fecha_hora, "Script encontrado "+linea + "en " + DIR, 'analisis_tmp()',"")
+            echo_alarmas_log( "Script encontrado "+linea + "en " + DIR, 'analisis_tmp()',"")
+            print ("\t\t Resultado: " + 'Se encontró un posible script en:' + linea)
             echo_prevencion_log("Archivo "+linea+" movido a la carpeta de cuarentena","Script encontrado en " +DIR)
+            print("\t\t Accion: "+ "Archivo "+linea+" movido a la carpeta de cuarentena")
         body = 'Se encontraron posibles archivos de script: \n' +body +"\nTodos los archivos se enviaron a cuarentena."
         enviar_correo(admin[0], admin[1], 'Tipo de alerta: Scripts encontrados', body)
-        obj_alarm_prev = AlarmaPrevencion()
-        obj_alarm_prev.setFechaHora(fecha_hora)
-        obj_alarm_prev.setTipoEscaneo('analisis_tmp')
-        obj_alarm_prev.setResultado("Script encontrado "+linea + "en " + DIR)
-        obj_alarm_prev.setAccion("Archivo "+linea+" movido a la carpeta de cuarentena")
+        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_tmp.scripts', body.replace("\n", " "), 'Todos los archivos se enviaron a cuarentena')
         insertarAlarmaPrevencion(obj_alarm_prev)

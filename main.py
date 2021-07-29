@@ -1,4 +1,4 @@
-import os, sys, subprocess
+import os, subprocess
 from preferencias import guardar_preferencias
 
 from variables_globales import directorio_cuarentena
