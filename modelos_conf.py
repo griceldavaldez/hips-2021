@@ -1,6 +1,6 @@
 from werkzeug import utils
 from flask_login import UserMixin
-from Configuraciones import utils
+import utils
 
 
 

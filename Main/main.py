@@ -1,5 +1,4 @@
 import os, sys, subprocess
-sys.path.append(os.path.abspath('../Configuraciones/'))
 from preferencias import guardar_preferencias
 
 from variables_globales import directorio_cuarentena

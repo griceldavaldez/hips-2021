@@ -1,5 +1,7 @@
 import os
-from Configuraciones.modelos import Usuario
+
+from modelos_conf import Usuario
+
 
 #recibe una ruta relativa y devuele la ruta absoluta
 def obtenerRutaAbsoluta(ruta_relativa):
@@ -33,3 +35,5 @@ def obtenerUsuarioPorId(id):
             usuario = Usuario(txt[0],txt[1],txt[2],txt[3])
             return usuario
     pass
+
+print("hola mundo")
