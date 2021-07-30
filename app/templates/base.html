@@ -43,16 +43,16 @@
                 {% if current_user.is_authenticated %}
                 <ul class="nav navbar-nav">
                     <li class="active"><a href=href="{{ url_for('home.homepage') }}">Home <span class="sr-only">(current)</span></a></li>
-                    <li><a href="{{ url_for('home.iniciar_escaneo') }}">Realizar verificaci&oacute;n </a></li>
-                    <li><a href="#">Ver alarmas y alertas</a></li>
+                    <li><a id="escanear" href="{{ url_for('home.iniciar_escaneo') }}">Realizar verificaci&oacute;n </a></li>
+                    <li><a href="{{ url_for('crud.list_veralert') }}">Ver alarmas y alertas</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configuraci&oacute;n <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Datos Globales</a></li>
+                            <li><a href="{{ url_for('crud.list_general') }}">Datos Globales</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ url_for('crud.list_md5') }}">MD5 Sum</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">L&iacute;mite de procesos</a></li>
+                            <li><a href="{{ url_for('crud.list_limproc') }}">L&iacute;mite de procesos</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ url_for('crud.list_apel') }}">Aplicaciones Peligrosas</a></li>
                         </ul>
