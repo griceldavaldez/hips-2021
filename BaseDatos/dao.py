@@ -226,6 +226,21 @@ def obtenerLimiteProceso():
         cerrar_conexion(dbConexion, dbCursor)
     return lista_datos
 
+#Obtener limite proceso por id
+def obtenerLimiteProcesoPorId(id):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        select_limproc = "SELECT * FROM limite_proceso where id='{}';"
+        dbCursor.execute(select_limproc.format(id))
+        datos = dbCursor.fetchone()
+        obj_limproc = LimiteProceso(datos[0],datos[1],datos[2],datos[3])
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion obtenerLimiteProcesoPorId()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+    return obj_limproc
+
 #Inserta las configuraciones sobre los limites de los procesos 
 def insertarLimiteProceso(obj_lim_process):
     try:
@@ -265,6 +280,32 @@ def actualizarLimiteProceso(obj_lim_process):
     finally:
         cerrar_conexion(dbConexion, dbCursor)
 
+#Actualizar limite proceso por id
+def actualizarLimiteProcesoPorId(obj_lim_process):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        update_limite_proceso = "UPDATE limite_proceso SET "
+        where = " where id = '{}';"
+        id = obj_lim_process.getId() #No debe ser null
+        if obj_lim_process.getUsoCpu() is not None:
+            campo = "uso_cpu = {};"
+            query = update_limite_proceso + campo + where
+            dbCursor.execute(query.format(obj_lim_process.getUsoCpu(), id))
+        if obj_lim_process.getUsoMemoria() is not None:
+            campo = "uso_memoria = {} "
+            query = update_limite_proceso + campo + where
+            dbCursor.execute(query.format(obj_lim_process.getUsoMemoria(), id))
+        if obj_lim_process.getTiempoMaximoEjecucion()  is not None:
+            campo = "tiempo_maximo_ejecucion = {} "
+            query = update_limite_proceso + campo + where
+            dbCursor.execute(query.format(obj_lim_process.getTiempoMaximoEjecucion(), id))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion actualizarLimiteProcesoPorId()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
 #Elimina un registros de la tabla limite_proceso dado LimiteProceso.nombre_proceso
 def eliminarLimiteProceso(obj_lim_process):
     try:
@@ -274,6 +315,19 @@ def eliminarLimiteProceso(obj_lim_process):
         dbConexion.commit()
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion eliminarLimiteProceso()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Elimina un registros de la tabla limite_proceso dado id
+def eliminarLimiteProcesoPorId(id):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        delete_limite_proceso =  "DELETE FROM limite_proceso where id = '{}';"
+        dbCursor.execute(delete_limite_proceso.format(id))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion eliminarLimiteProcesoPorId()")
         print("Motivo:  ", error)
     finally:
         cerrar_conexion(dbConexion, dbCursor)

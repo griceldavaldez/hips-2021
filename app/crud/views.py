@@ -298,3 +298,125 @@ def edit_general(id):
                            add_registro=add_registro, form=form,
                            title="Editar " + label, label=label)
 
+#---- Límite procesos --------------------------------------------------------------
+@crud.route('/limproc', methods=['GET', 'POST'])
+@login_required
+def list_limproc():
+    #Modif-----------------<
+    modulo = 'limproc'
+    label = 'Límite Procesos'
+    lista_valores = dao.obtenerLimiteProceso()
+    #Modif----------------->
+
+    return render_template('crud/'+modulo+'/list_'+modulo+'.html',
+                           lista_valores=lista_valores, title=label, label=label)
+
+
+@crud.route('/limproc/add', methods=['GET', 'POST'])
+@login_required
+def add_limproc():
+
+    #Modif-----------------<
+    modulo = 'limproc'
+    form = LimiteProcesoForm()
+    label = 'Límite Procesos'
+    #Modif----------------->
+
+    add_registro = True
+    if form.validate_on_submit():
+
+        #Modif-----------------<
+        limproc =LimiteProceso(None,form.nombre_proceso.data,form.uso_cpu.data,form.uso_memoria.data,form.tiempo_maximo_ejecucion.data)
+        #Modif----------------->
+
+        try:
+            #Modif-----------------<
+            dao.insertarLimiteProceso(limproc)
+            #Modif----------------->
+
+            flash('Se agregó correctamente '+label+'.', 'info')
+        except:
+            flash('Error: No se pudo agregar '+label+'.', 'error')
+
+        return redirect(url_for('crud.list_'+modulo))
+
+    return render_template('crud/'+modulo+'/'+modulo+'.html', action="Add",
+                           add_registro=add_registro, form=form,
+                           title="Agregar " + label, label=label)
+
+
+@crud.route('/limproc/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_limproc(id):
+
+    #Modif-----------------<
+    modulo = 'limproc'
+    form = LimiteProcesoForm()
+    label = 'Límite Procesos'
+    objeto = dao.obtenerLimiteProcesoPorId(id)
+    form = LimiteProcesoForm(obj=objeto)
+    #Modif----------------->
+
+    add_registro = False
+
+    if form.validate_on_submit():
+        #Modif-----------------<
+        objeto.setNombreProceso(form.nombre_proceso.data)
+        objeto.setUsoCpu(form.uso_cpu.data)
+        objeto.setUsoMemoria(form.uso_memoria.data)
+        objeto.setTiempoMaximoEjecucion(form.tiempo_maximo_ejecucion.data)
+        #Modif----------------->
+
+        try:
+            #Modif-----------------<
+            dao.actualizarLimiteProcesoPorId(objeto)
+            #Modif----------------->
+
+            flash('Se actualizó correctamente.','info')
+        except:
+            flash('Error: No se pudo actualizar '+label+'.','error')
+        return redirect(url_for('crud.list_' + modulo))
+
+    #Modif-----------------<
+    form.nombre_proceso.data = objeto.getNombreProceso()
+    form.uso_cpu.data = objeto.getUsoCpu()
+    form.uso_memoria.data = objeto.getUsoMemoria()
+    form.tiempo_maximo_ejecucion.data = objeto.getTiempoMaximoEjecucion()
+    #Modif----------------->
+
+    return render_template('crud/'+modulo+'/'+modulo+'.html', action="Edit",
+                           add_registro=add_registro, form=form,
+                           title="Editar " + label, label=label)
+
+
+@crud.route('/limproc/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_limproc(id):
+    #Modif-----------------<
+    modulo = 'limproc'
+    label = 'Límite Proceso'
+    #Modif----------------->
+
+    try:
+        #Modif-----------------<
+        dao.eliminarLimiteProcesoPorId(id)
+        #Modif----------------->
+
+        flash('Se eliminó correctamente.','info')
+    except:
+        flash('Error: No se pudo eliminar '+label+'.','error')
+
+    return redirect(url_for('crud.list_' + modulo))
+
+#---- Listar alertas --------------------------------------------------------------
+@crud.route('/veralert', methods=['GET', 'POST'])
+@login_required
+def list_veralert():
+    #Modif-----------------<
+    modulo = 'veralert'
+    label = 'Ver alarmas y alertas'
+    lista_valores = dao.obtenerAlarmaPrevencion()
+    #Modif----------------->
+
+    return render_template('crud/'+modulo+'/list_'+modulo+'.html',
+                           lista_valores=lista_valores, title=label, label=label)
