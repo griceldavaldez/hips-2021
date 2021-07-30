@@ -190,3 +190,111 @@ def delete_apel(id):
         flash('Error: No se pudo eliminar '+label+'.','error')
 
     return redirect(url_for('crud.list_' + modulo))
+
+
+    #---- Datos generales --------------------------------------------------------------
+@crud.route('/general', methods=['GET', 'POST'])
+@login_required
+def list_general():
+    #Modif-----------------<
+    modulo = 'general'
+    label = 'Datos Globales'
+
+    datos = dao.obtenerGeneral()
+
+    datos_lista = []
+    datos_lista.append(datos)  
+
+    lista_valores = datos_lista
+    #Modif----------------->
+
+    return render_template('crud/'+modulo+'/list_'+modulo+'.html',
+                           lista_valores=lista_valores, title=label, label=label)
+
+
+'''@crud.route('/general/add', methods=['GET', 'POST'])
+@login_required
+def add_general():
+
+    #Modif-----------------<
+    modulo = 'general'
+    form = GeneralForm()
+    label = 'Datos Globales'
+    #Modif----------------->
+
+    add_registro = True
+    if form.validate_on_submit():
+
+        #Modif-----------------<
+        gen =General(None, form.ip.data, form.correo.data, form.contrasenha_correo.data, form.uso_cpu_por_defecto.data, form.uso_memoria_por_defecto.data, form.intento_maximo_ssh.data,form.correo_maximo_por_usuario.data,form.cola_maxima_correo.data)
+        #Modif----------------->
+
+        try:
+            #Modif-----------------<
+            
+            #Modif----------------->
+
+            flash('Se agregó correctamente '+label+'.', 'info')
+        except:
+            flash('Error: No se pudo agregar '+label+'.', 'error')
+
+        return redirect(url_for('crud.list_'+modulo))
+
+    return render_template('crud/'+modulo+'/'+modulo+'.html', action="Add",
+                           add_registro=add_registro, form=form,
+                           title="Agregar " + label, label=label)
+'''
+
+@crud.route('/general/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_general(id):
+
+    #Modif-----------------<
+    modulo = 'general'
+    form = GeneralForm()
+    label = 'Datos Globales'
+    objeto = dao.obtenerGeneral()
+
+    form = GeneralForm(obj=objeto)
+    #Modif----------------->
+
+    add_registro = False
+
+    if form.validate_on_submit():
+        #Modif-----------------<
+        objeto.setIP(form.ip.data)
+        objeto.setCorreo(form.correo.data)
+        objeto.setContrasenhaCorreo(form.contrasenha_correo.data)
+        objeto.setUsoCpuPorDefecto(form.uso_cpu_por_defecto.data)
+        objeto.setUsoMemoriaPorDefecto(form.uso_memoria_por_defecto.data)
+        objeto.setIntentoMaximoSSH(form.intento_maximo_ssh.data)
+        objeto.setCorreoMaximoPorUsuario(form.correo_maximo_por_usuario.data)
+        objeto.setColaMaximaCorreo(form.cola_maxima_correo.data)
+
+        #Modif----------------->
+
+        try:
+            #Modif-----------------<
+            dao.actualizarGeneral(objeto)
+            #Modif----------------->
+
+            flash('Se actualizó correctamente.','info')
+        except:
+            flash('Error: No se pudo actualizar '+label+'.','error')
+        return redirect(url_for('crud.list_' + modulo))
+
+    #Modif-----------------<
+    form.ip.data = objeto.getIP()
+    form.correo.data = objeto.getCorreo()
+    form.contrasenha_correo.data = objeto.getContrasenhaCorreo()
+    form.uso_cpu_por_defecto.data = objeto.getUsoCpuPorDefecto()
+    form.uso_memoria_por_defecto.data = objeto.getUsoMemoriaPorDefecto()
+    form.intento_maximo_ssh.data = objeto.getIntentoMaximoSSH()
+    form.correo_maximo_por_usuario.data = objeto.getCorreoMaximoPorUsuario()
+    form.cola_maxima_correo.data = objeto.getColaMaximaCorreo()
+    #Modif----------------->
+
+    return render_template('crud/'+modulo+'/'+modulo+'.html', action="Edit",
+                           add_registro=add_registro, form=form,
+                           title="Editar " + label, label=label)
+
