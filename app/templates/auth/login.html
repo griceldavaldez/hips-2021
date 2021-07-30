@@ -3,14 +3,12 @@
 {% import "bootstrap/utils.html" as utils %} {% import "bootstrap/wtf.html" as wtf %} {% extends "base.html" %} {% block title %}Login{% endblock %} {% block body %}
 <div class="content-section">
     <br/> {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <span>{{ message }}</span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-                </button>
     </div>
     {% endfor %} {% endif %} {% endwith %}
-    <br/>
+
     <div class="center">
         <h1>Acceder al sistema</h1>
         <br/> {{ wtf.quick_form(form) }}
