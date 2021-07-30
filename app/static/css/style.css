@@ -141,7 +141,7 @@ p.copyright {
 }
 
 #loading {
-    background: url('img/spinner.gif') no-repeat center center;
+    background: url('../img/spinner.gif') no-repeat center center;
     position: absolute;
     top: 0;
     left: 0;
