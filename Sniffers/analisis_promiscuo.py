@@ -59,7 +59,7 @@ def verificar_modo_promiscuo(P_DIR, admin ):
             print("\t\t Resultado: " + 'Modo promiscuo activado: '+ dispositivo)
             print("\t\t Accion: "+ "Se envio un correo al administrador para informar la alerta")
         enviar_correo(admin[0], admin[1],'Tipo de Alerta: Modo promiscuo activado',body)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_promiscuo.modo_promiscuo', 'Modo promiscuo activado. '+ body.replace("\n", " "), "Se envio un correo al administrador para informar la alerta")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_promiscuo.modo_promiscuo', 'Modo promiscuo activado. '+ body.replace("\n", " "), "Se envio un correo al administrador para informar la alerta")
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 #Funcion: verificar_sniffers
@@ -86,7 +86,7 @@ def verificar_sniffers(P_APP_LIST, admin):
     if len(body)>1:
         body = 'Servicio de sniffers encontrados:\n'+body+"\nTodos los sniffers fueron enviados a cuarentena"
         enviar_correo(admin[0], admin[1],'Tipo de Alarma: Sniffers encontrados',body)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_promiscuo.sniffers', 'Servicio de sniffers encontrados:'+body.replace('\n', ' '), "Los sniffers fueron eliminados y enviados a cuarentena")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_promiscuo.sniffers', 'Servicio de sniffers encontrados:'+body.replace('\n', ' '), "Los sniffers fueron eliminados y enviados a cuarentena")
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 

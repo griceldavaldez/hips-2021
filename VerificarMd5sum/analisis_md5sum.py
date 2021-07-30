@@ -27,7 +27,7 @@ def verificar_md5sum(MD5SUM_LIST, admin):
     if body != '':
         body = 'Hash MD5SUM modificada:\n\n' + body	
         enviar_correo(admin[0], admin[1],'Tipo de alerta: MD5SUM modificada',body)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), "verificar_md5sum", body.replace("\n", " "), 'Se envio un correo al administrador para dar aviso de lo ocurrido')
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), "verificar_md5sum", body.replace("\n", " "), 'Se envio un correo al administrador para dar aviso de lo ocurrido')
         insertarAlarmaPrevencion(obj_alarm_prev)
     subprocess.Popen("rm "+md5_tmp_dir, stdout=subprocess.PIPE, shell=True)
 

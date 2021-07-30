@@ -32,7 +32,7 @@ def add_md5():
     label = 'Md5 Sum'
 
     if form.validate_on_submit():
-        md5 = Md5sum(directorio=form.directorio.data)
+        md5 = Md5sum(None, form.directorio.data, None)
 
         try:
             dao.insertarMd5sum(md5)

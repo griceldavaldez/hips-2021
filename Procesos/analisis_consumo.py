@@ -67,6 +67,6 @@ def analisis_consumo_procesos(LIMIT_PROCESOS, admin):
     if body !='':
         body = 'Se encontro un uso elevado del proceso: \n\n '+ body
         enviar_correo(admin[0], admin[1],'Tipo de Alerta: Alto uso de recursos',body)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_consumo_procesos', body.replace('\n', ' '), "Se mato al proceso con alto consumo de recursos y se envio un correo al administrador")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_consumo_procesos', body.replace('\n', ' '), "Se mato al proceso con alto consumo de recursos y se envio un correo al administrador")
         insertarAlarmaPrevencion(obj_alarm_prev)
 

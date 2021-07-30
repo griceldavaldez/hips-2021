@@ -12,7 +12,7 @@ def obtenerGeneral():
         select_general = "SELECT * FROM general;"
         dbCursor.execute(select_general)
         datos = dbCursor.fetchone()
-        obj_gral = General(datos[0],datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7])
+        obj_gral = General(datos[0],datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7],datos[8])
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerGeneral()")
         print("Motivo:  ", error)
@@ -43,7 +43,7 @@ def obtenerMd5sum():
         datos = dbCursor.fetchall()
         datos_lista = []
         for i in datos:
-            obj_md5sum = Md5sum(i[0], i[1])
+            obj_md5sum = Md5sum(i[0], i[1], i[2])
             datos_lista.append(obj_md5sum)
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerMd5sum()")
@@ -129,7 +129,7 @@ def obtenerAplicacionPeligrosa():
         datos = dbCursor.fetchall()
         lista_datos = []
         for fila in datos:
-            obj_app_pelig = AplicacionPeligrosa(fila[0])
+            obj_app_pelig = AplicacionPeligrosa(fila[0],fila[1])
             lista_datos.append(obj_app_pelig)
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerAplicacionPeligrosa()")
@@ -174,7 +174,7 @@ def obtenerLimiteProceso():
         datos = dbCursor.fetchall()
         lista_datos = []
         for fila in datos:
-            obj_lim_process = LimiteProceso(fila[0],fila[1],fila[2],fila[3])
+            obj_lim_process = LimiteProceso(fila[0],fila[1],fila[2],fila[3],fila[4])
             lista_datos.append(obj_lim_process)
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerLimiteProceso()")
@@ -245,7 +245,7 @@ def obtenerAlarmaPrevencion():
         datos = dbCursor.fetchall()
         lista_datos = []
         for i in datos:
-            obj_alarm_prev = AlarmaPrevencion(i[0], i[1], i[2], i[3])
+            obj_alarm_prev = AlarmaPrevencion(i[0], i[1], i[2], i[3], i[4])
             lista_datos.append(obj_alarm_prev)    
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerAlarmaPrevencion()")

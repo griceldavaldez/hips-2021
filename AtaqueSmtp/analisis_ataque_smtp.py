@@ -45,7 +45,7 @@ def verificar_smtp_maillog(maxmailpu, admin):
             print(print("\t\t Resultado: " + "Ataque SMTP. " + str(aux)+" correos electronicos enviados usando "+key))
             echo_prevencion_log( key+" se agrego a la lista negra de correos electronicos de Postfix", "Ataque SMTP")
             print("\t\t Accion: " + key+" se agrego a la lista negra de correos electronicos de Postfix")
-            obj_alarm_prev = AlarmaPrevencion(get_fecha(),'analisis_ataque_smtp.maillog', "Ataque SMTP. " + str(aux)+" correos electronicos enviados usando "+key, key+" se agrego a la lista negra de correos electronicos de Postfix")
+            obj_alarm_prev = AlarmaPrevencion(None, get_fecha(),'analisis_ataque_smtp.maillog', "Ataque SMTP. " + str(aux)+" correos electronicos enviados usando "+key, key+" se agrego a la lista negra de correos electronicos de Postfix")
             insertarAlarmaPrevencion(obj_alarm_prev)
             
 
@@ -84,7 +84,7 @@ def verificar_smtp_messages(maxmailpu, admin):
             print("\t\t Resultado: " + "Ataque SMTP."+ "Fallo de autenticacion SMTP usando: " + body.replace('\n', ' '))
             echo_prevencion_log("Fallo de autenticacion SMTP usando: " + body.replace("\n", " ") + "Se cambiaron todas las contraseñas", "Ataque SMTP" )
             print("\t\t Accion: " + "Se cambiaron todas las contraseñas de los usuarios involucrados")
-            obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_ataque_smtp.messages',"Ataque SMTP."+ "Fallo de autenticacion SMTP usando: " + body.replace('\n', ' '), "Se cambiaron todas las contraseñas de los usuarios involucrados" )
+            obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_ataque_smtp.messages',"Ataque SMTP."+ "Fallo de autenticacion SMTP usando: " + body.replace('\n', ' '), "Se cambiaron todas las contraseñas de los usuarios involucrados" )
             insertarAlarmaPrevencion(obj_alarm_prev)
 
 
@@ -122,7 +122,7 @@ def verificar_smtp_secure(maxmailpu, admin):
             print("\t\t Resultado: " + "Ataque SMTP. "+ "Error masivo de autenticación de usuario SMTP usando: " + body.replace('\n', ' ') )
             echo_prevencion_log("Error masivo de autenticación de usuario SMTP usando: " + body.replace('\n', ' ') + "Se cambiaron todas las contraseñas", "Ataque SMTP")
             print("\t\t Accion: " + "Se cambiaron todas las contraseñas de los usuarios involucrados" )
-            obj_alarm_prev = AlarmaPrevencion(get_fecha(),'analisis_ataque_smtp.secure', "Ataque SMTP. "+ "Error masivo de autenticación de usuario SMTP usando: " + body.replace('\n', ' '), "Se cambiaron todas las contraseñas de los usuarios involucrados")
+            obj_alarm_prev = AlarmaPrevencion(None, get_fecha(),'analisis_ataque_smtp.secure', "Ataque SMTP. "+ "Error masivo de autenticación de usuario SMTP usando: " + body.replace('\n', ' '), "Se cambiaron todas las contraseñas de los usuarios involucrados")
             insertarAlarmaPrevencion(obj_alarm_prev)
 
 

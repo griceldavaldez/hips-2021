@@ -45,7 +45,7 @@ def buscar_shells(DIR, admin):
         body = msg +"\nTodos los archivos se enviaron a cuarentena."
         enviar_correo(admin[0], admin[1], 'Tipo de alerta: Shells encontrados',body) # se envia el correo
         #se registra los resultados en la base de datos
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_tmp.shells', msg.replace("\n", " "), "Todos los archivos se enviaron a cuarentena")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_tmp.shells', msg.replace("\n", " "), "Todos los archivos se enviaron a cuarentena")
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 
@@ -79,5 +79,5 @@ def buscar_scripts(DIR, admin):
             print("\t\t Accion: "+ "Archivo "+linea+" movido a la carpeta de cuarentena")
         body = 'Se encontraron posibles archivos de script: \n' +body +"\nTodos los archivos se enviaron a cuarentena."
         enviar_correo(admin[0], admin[1], 'Tipo de alerta: Scripts encontrados', body)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_tmp.scripts', body.replace("\n", " "), 'Todos los archivos se enviaron a cuarentena')
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_tmp.scripts', body.replace("\n", " "), 'Todos los archivos se enviaron a cuarentena')
         insertarAlarmaPrevencion(obj_alarm_prev)
