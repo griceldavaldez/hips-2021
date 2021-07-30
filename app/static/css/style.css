@@ -116,7 +116,7 @@ p.copyright {
     height: 100%;
     margin: 0 auto -4em;
 }
-
+/*
 .alert {
     padding: 12px;
     border-radius: 3px;
@@ -124,7 +124,7 @@ p.copyright {
     margin-bottom: 16px;
     border-width: 2px;
     border-style: solid;
-}
+}*/
 
 .alert-error {
     border-color: darkred;

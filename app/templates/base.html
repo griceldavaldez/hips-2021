@@ -73,6 +73,13 @@
 
 
     <div class="wrapper">
+        <br/> {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="width: 20%;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+        
         {% block body %} {% endblock %}
         <div class="push"></div>
     </div>
