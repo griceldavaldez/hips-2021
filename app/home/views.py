@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, flash
 import flask
 from flask_login import login_required
 
@@ -14,7 +14,7 @@ def homepage():
 @home.route('/scan')
 @login_required
 def iniciar_escaneo():
-    flask('Se inició el escaneo...')
+    flash('Se inició el escaneo...')
     main.main()
-    flask('Escaneo finalizado.')
+    flash('Escaneo finalizado.')
     return render_template('home/index.html', title="HIPS")
