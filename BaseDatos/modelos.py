@@ -56,11 +56,6 @@ class General(object):
 
 #tabla md5sum
 class Md5sum(object):
-    #Constructor de la clase
-    def __init__(self, id, dir, hash):
-        self.id = id
-        self.directorio = dir
-        self.hash = hash
     #Metodos para obtener los atributos de la clase
     def getId(self):
         return self.id
@@ -75,6 +70,10 @@ class Md5sum(object):
         self.directorio = dir
     def setHash(self, hash):
         self.hash = hash 
+    def __init__(self, id, directorio, hash):
+        self.id = id
+        self.directorio = directorio
+        self.hash = hash
 
 
 #tabla aplicacion_peligrosa
