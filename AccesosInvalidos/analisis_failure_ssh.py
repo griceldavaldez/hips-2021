@@ -45,5 +45,5 @@ def analisis_failure_ssh(MI_IP,limite, admin):
     if body_prevencion != '':
         body_prevencion = "Las siguientes direcciones IP fueron bloqueadas usando IPTables :: Error de autenticacion SSH\n" + body_prevencion
         enviar_correo(admin[0], admin[1],'Tipo de Alerta: Bloqueo de IPs', body_prevencion)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analisis_failure_ssh', "Demasiadas fallas de autenticacion SSH."+ " SSH fallo la contraseña mas de "+ str (limite) +" veces", body_prevencion.replace("\n", " "))
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analisis_failure_ssh', "Demasiadas fallas de autenticacion SSH."+ " SSH fallo la contraseña mas de "+ str (limite) +" veces", body_prevencion.replace("\n", " "))
         insertarAlarmaPrevencion(obj_alarm_prev)

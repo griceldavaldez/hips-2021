@@ -25,7 +25,7 @@ def verificar_cola_correo(MAX_Q_COUNT, admin):
         enviar_correo(admin[0], admin[1],'Tipo de alerta: Limite de cola de correo electronico alcanzado', info + "\n" + prevencion)
         echo_alarmas_log(info , "verificar_cola_correo",'') 
         echo_prevencion_log(prevencion, "Posible ataque DoS/DDoS")
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), "verificar_cola_correo", info, prevencion)
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), "verificar_cola_correo", info, prevencion)
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 

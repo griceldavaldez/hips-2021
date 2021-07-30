@@ -14,7 +14,7 @@ def comprobar_usuarios_conectados(admin):
     enviar_correo(admin[0], admin[1], 'Usuarios conectados', body)
     print( "\t\t Resultado: "  + "Usuarios conectados: " + body.replace("\n", " "))
     print("\t\t Accion: " + 'Se envio un correo al administrador con la informacion obtenida del escaneo')
-    obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'usuarios_conectados', "Usuarios conectados: " + body.replace("\n", " "), 'Se envio un correo al administrador con la informacion obtenida del escaneo')
+    obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'usuarios_conectados', "Usuarios conectados: " + body.replace("\n", " "), 'Se envio un correo al administrador con la informacion obtenida del escaneo')
     insertarAlarmaPrevencion(obj_alarm_prev)
 
     

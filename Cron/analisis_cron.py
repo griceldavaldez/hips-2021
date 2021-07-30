@@ -41,7 +41,7 @@ def analsis_cron(P_APP_LIST, admin):
         echo_alarmas_log("Archivos sospechosos en Cron " + body.replace("\n", " "), 'analsis_cron', '')
         print("\t\t Resultado: " + "Archivos sospechosos en Cron " + body.replace("\n", " "))
         print("Se envio un correo al administrador para dar aviso de la alarma")
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), 'analsis_cron', "Archivos sospechosos en Cron " + body.replace("\n", " ") , "Se envio un correo al administrador para dar aviso de la alarma")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), 'analsis_cron', "Archivos sospechosos en Cron " + body.replace("\n", " ") , "Se envio un correo al administrador para dar aviso de la alarma")
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 

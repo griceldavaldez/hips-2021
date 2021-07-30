@@ -39,7 +39,7 @@ def analisis_directorio_invalido (MY_IP,limite, admin):
     if body != '':
         body = "IP bloqueadas: "+body
         enviar_correo(admin[0], admin[1],'Tipo de Alerta: Directorio web desconocido',body)
-        obj_alarm_prev = AlarmaPrevencion(get_fecha(), "analisis_directorio_invalido", "Intentos repetidos para acceder a un directorio web inexistente. " + body.replace('\n', " "), "Ips fueron bloquedas usando IPTables y se envio un correo al administrador para dar aviso de la alarma")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), "analisis_directorio_invalido", "Intentos repetidos para acceder a un directorio web inexistente. " + body.replace('\n', " "), "Ips fueron bloquedas usando IPTables y se envio un correo al administrador para dar aviso de la alarma")
         insertarAlarmaPrevencion(obj_alarm_prev)
 
 
