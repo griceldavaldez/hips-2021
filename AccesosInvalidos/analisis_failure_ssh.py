@@ -16,6 +16,7 @@ from utils import get_fecha
 #   limite (int) limite de intentos fallidos.Por lo general son 5
 #   admin (list) contiene los datos del administrador como su correo y contraseña
 def analisis_failure_ssh(MI_IP,limite, admin):
+    print("Inicia la funcion analisis_failure_ssh() \n", "\t\t Hora: " + get_fecha())
     counts = dict()
     ip_lista = list()
     p =subprocess.Popen("cat /var/log/secure | grep -i \"ssh\" | grep -i \"Failed password\" | grep -v \""+MI_IP+"\"", stdout=subprocess.PIPE, shell=True)
