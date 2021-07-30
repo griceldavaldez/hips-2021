@@ -15,5 +15,5 @@ def homepage():
 @login_required
 def iniciar_escaneo():
     main.main()
-    flash('Escaneo finalizado.')
+    flash('Escaneo finalizado.','info')
     return render_template('home/index.html', title="HIPS")

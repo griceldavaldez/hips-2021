@@ -36,7 +36,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Sesión terminada correctamente.')
+    flash('Sesión terminada correctamente.','info')
     return redirect(url_for('auth.login'))
 
 @login_manager.user_loader
