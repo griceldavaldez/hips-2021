@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, PasswordField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, Length
 
 
@@ -13,8 +13,8 @@ class AppPeligrosaForm(FlaskForm):
 
 class LimiteProcesoForm(FlaskForm):
     nombre_proceso = StringField('Nombre Proceso', validators=[DataRequired(), Length(min=1, max=100)])
-    uso_cpu = IntegerField('Uso CPU', [DataRequired()])
-    uso_memoria = IntegerField('Uso Memoria', [DataRequired()])
+    uso_cpu = DecimalField('Uso CPU', [DataRequired()])
+    uso_memoria = DecimalField('Uso Memoria', [DataRequired()])
     tiempo_maximo_ejecucion = IntegerField('Tiempo Máx. Ejec. ', [DataRequired()])
     submit = SubmitField('Confirmar')
 
