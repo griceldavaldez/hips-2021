@@ -23,7 +23,7 @@ def list_md5():
 def add_md5():
     modulo = 'md5'
     add_registro = True
-    form = MD5SumForm
+    form = MD5SumForm()
     label = 'Md5 Sum'
 
     if form.validate_on_submit():
@@ -47,7 +47,7 @@ def edit_md5(id):
 
     modulo = 'md5'
     add_registro = False
-    form = MD5SumForm
+    form = MD5SumForm()
     label = 'Md5 Sum'
 
     objeto = dao.obtenerMd5sumPorId(id)
