@@ -22,5 +22,5 @@ def analisis_auths_failure(admin):
     body = body + ret_msg
     if body != '':
         enviar_correo(admin[0], admin[1],'Tipo de Alerta : Authentication failure',body)
-        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), "analisis_auths_failure", "Authentication failure: "+ body.replace("\n", " "),"Se envio un correo al administrador para dar aviso de lo ocurrido")
+        obj_alarm_prev = AlarmaPrevencion(None, get_fecha(), "analisis_auths_failure", "Authentication failure: "+ "Se encontraron varias authentication failure.","Se envio un correo al administrador para dar aviso de lo ocurrido")
         insertarAlarmaPrevencion(obj_alarm_prev)
