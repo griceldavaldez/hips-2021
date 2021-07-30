@@ -116,6 +116,8 @@ p.copyright {
     height: 100%;
     margin: 0 auto -4em;
 }
+
+
 /*
 .alert {
     padding: 12px;
@@ -136,4 +138,14 @@ p.copyright {
     border-color: rgb(30, 78, 10);
     background-color: rgb(116, 185, 95);
     color: black;
+}
+
+#loading {
+    background: url('img/spinner.gif') no-repeat center center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999999;
 }
