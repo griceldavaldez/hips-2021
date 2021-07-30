@@ -233,7 +233,7 @@ def obtenerLimiteProcesoPorId(id):
         select_limproc = "SELECT * FROM limite_proceso where id='{}';"
         dbCursor.execute(select_limproc.format(id))
         datos = dbCursor.fetchone()
-        obj_limproc = LimiteProceso(datos[0],datos[1],datos[2],datos[3])
+        obj_limproc = LimiteProceso(datos[0],datos[1],datos[2],datos[3],datos[4])
     except psycopg2.DatabaseError as error:
         print("Ocurrio un error al ejecutar la funcion obtenerLimiteProcesoPorId()")
         print("Motivo:  ", error)

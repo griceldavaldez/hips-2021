@@ -13,9 +13,9 @@
                                 <th width="30%"> Nombre Proceso </th>
                                 <th width="15%"> Uso CPU </th>
                                 <th width="15%"> Uso Memoria </th>
-                                <th width="20%"> Tiempo M&aacute;x. Ejec. </th>
-                                <th width="10%"> Editar </th>
-                                <th width="10%"> Eliminar </th>
+                                <th width="10%"> Tiempo M&aacute;x. Ejec. </th>
+                                <th width="15%"> Editar </th>
+                                <th width="15%"> Eliminar </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,12 +26,12 @@
                                 <td> {{ valor.uso_memoria }} </td>
                                 <td> {{ valor.tiempo_maximo_ejecucion }} </td>
                                 <td>
-                                    <a href="{{ url_for('crud.edit_veralert', id=valor.id) }}">
+                                    <a href="{{ url_for('crud.edit_limproc', id=valor.id) }}">
                                         <i class="fa fa-pencil"></i> Editar
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url_for('crud.delete_veralert', id=valor.id) }}">
+                                    <a href="{{ url_for('crud.delete_limproc', id=valor.id) }}">
                                         <i class="fa fa-trash"></i> Eliminar
                                     </a>
                                 </td>
@@ -45,7 +45,7 @@
                     <div style="text-align: center">
                         <h3> No se encontraron registros de {{label}}. </h3>
                         <hr class="intro-divider"> {% endif %}
-                        <a href="{{ url_for('crud.add_veralert') }}" class="btn btn-default btn-lg">
+                        <a href="{{ url_for('crud.add_limproc') }}" class="btn btn-default btn-lg">
                             <i class="fa fa-plus"></i> Agregar {{label}}
                         </a>
                     </div>
