@@ -21,7 +21,7 @@ class LimiteProcesoForm(FlaskForm):
 class GeneralForm(FlaskForm):
     ip = StringField('IP', validators=[DataRequired(), Length(min=1, max=100)])
     correo = StringField('Correo E.', validators=[DataRequired(), Length(min=1, max=100)])
-    contrasenha_correo = PasswordField('Password Correo', validators=[DataRequired(), Length(min=1, max=100)])
+    contrasenha_correo = StringField('Password Correo', validators=[DataRequired(), Length(min=1, max=100)])
     uso_cpu_por_defecto = IntegerField('Uso CPU Default', [DataRequired()])
     uso_memoria_por_defecto = IntegerField('Uso Memoria Default', [DataRequired()])
     intento_maximo_ssh = IntegerField('Intento Máximo SSH', [DataRequired()])
