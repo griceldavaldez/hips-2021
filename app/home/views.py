@@ -14,7 +14,6 @@ def homepage():
 @home.route('/scan')
 @login_required
 def iniciar_escaneo():
-    flash('Se inició el escaneo...')
     main.main()
     flash('Escaneo finalizado.')
     return render_template('home/index.html', title="HIPS")
