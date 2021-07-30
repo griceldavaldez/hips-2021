@@ -139,6 +139,21 @@ def obtenerAplicacionPeligrosa():
         cerrar_conexion(dbConexion, dbCursor)
     return lista_datos
 
+#Obtener aplicacion peligrosa por id
+def obtenerAplicacionPeligrosaPorId(id):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        select_apel = "SELECT * FROM aplicacion_peligrosa where id='{}';"
+        dbCursor.execute(select_apel.format(id))
+        datos = dbCursor.fetchone()
+        obj_apel = AplicacionPeligrosa(datos[0],datos[1])
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion obtenerAplicacionPeligrosaPorId()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+    return obj_apel
+
 #Inserta aplicaciones peligrosas como sniffers
 def insertarAplicacionPeligrosa(obj_app_pelig):
     try:
