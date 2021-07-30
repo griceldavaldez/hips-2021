@@ -1,4 +1,5 @@
-import psycopg2, os
+import os
+import psycopg2
 
 #Lee de un archivo los datos para la conexion a la base de datos
 #Retorna: nombre de la base de datos, usuario y contrasenha

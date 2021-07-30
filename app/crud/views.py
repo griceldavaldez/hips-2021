@@ -6,11 +6,6 @@ from .forms import MD5SumForm,LimiteProcesoForm,GeneralForm,AppPeligrosaForm
 from BaseDatos.modelos import Md5sum, General, AlarmaPrevencion, AplicacionPeligrosa, LimiteProceso
 from BaseDatos import dao
 
-
-
-# Department Views
-
-
 @crud.route('/md5', methods=['GET', 'POST'])
 @login_required
 def list_md5():
@@ -43,7 +38,7 @@ def add_md5():
 
     return render_template('crud/'+modulo+'/'+modulo+'.html', action="Add",
                            add_registro=add_registro, form=form,
-                           title="Agregar " + label, title=label, label=label)
+                           title="Agregar " + label, label=label)
 
 
 @crud.route('/md5/edit/<int:id>', methods=['GET', 'POST'])

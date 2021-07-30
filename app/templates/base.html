@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="#">Datos Globales</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">MD5 Sum</a></li>
+                            <li><a href="{{ url_for('crud.list_md5') }}">MD5 Sum</a></li>
                             <li class="divider"></li>
                             <li><a href="#">L&iacute;mite de procesos</a></li>
                             <li class="divider"></li>
@@ -60,7 +60,7 @@
     </nav>
 
 
-    <div class="wrapper">
+    <div class="wrapper" style="background-color: #aec251;">
         {% block body %} {% endblock %}
         <div class="push"></div>
     </div>
