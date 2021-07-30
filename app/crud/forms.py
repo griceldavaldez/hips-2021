@@ -9,12 +9,14 @@ class MD5SumForm(FlaskForm):
 
 class AppPeligrosaForm(FlaskForm):
     nombre_sniffer = StringField('Nombre Sniffer', validators=[DataRequired(), Length(min=1, max=100)])
+    submit = SubmitField('Confirmar')
 
 class LimiteProcesoForm(FlaskForm):
     nombre_proceso = StringField('Nombre Proceso', validators=[DataRequired(), Length(min=1, max=100)])
     uso_cpu = IntegerField('Uso CPU', [DataRequired()])
     uso_memoria = IntegerField('Uso CPU', [DataRequired()])
     tiempo_maximo_ejecucion = IntegerField('Uso CPU', [DataRequired()])
+    submit = SubmitField('Confirmar')
 
 class GeneralForm(FlaskForm):
     ip = StringField('IP', validators=[DataRequired(), Length(min=1, max=100)])
@@ -25,3 +27,4 @@ class GeneralForm(FlaskForm):
     intento_maximo_ssh = IntegerField('Intento Máximo SSH', [DataRequired()])
     correo_maximo_por_usuario = IntegerField('Correo Máx. por usuario', [DataRequired()])
     cola_maxima_correo = IntegerField('Cola Máx. por correo', [DataRequired()])
+    submit = SubmitField('Confirmar')
