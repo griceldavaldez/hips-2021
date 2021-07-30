@@ -54,7 +54,7 @@
                             <li class="divider"></li>
                             <li><a href="#">L&iacute;mite de procesos</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Aplicaciones Peligrosas</a></li>
+                            <li><a href="{{ url_for('crud.list_apel') }}">Aplicaciones Peligrosas</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -78,9 +78,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <span>{{ message }}</span>
         </div>
-        {% endfor %} {% endif %} {% endwith %}
-        
-        {% block body %} {% endblock %}
+        {% endfor %} {% endif %} {% endwith %} {% block body %} {% endblock %}
         <div class="push"></div>
     </div>
     <footer>
