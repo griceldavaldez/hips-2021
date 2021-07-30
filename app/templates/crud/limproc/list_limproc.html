@@ -3,6 +3,8 @@
     <div class="outer">
         <div class="middle">
             <div class="inner">
+                <br/> {{ utils.flashed_messages() }}
+                <br/>
                 <h1 style="text-align:center;">{{label}}</h1>
                 {% if lista_valores %}
                 <hr class="intro-divider">

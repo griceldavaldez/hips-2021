@@ -92,6 +92,7 @@ def actualizarMd5sum(obj_md5sum):
         print("Motivo:  ", error)
     finally:
         cerrar_conexion(dbConexion, dbCursor)
+        
 
 #Elimina un registro de la tabla md5sum dado su Md5sum.directorio
 def eliminarMd5sum(obj_md5sum):
@@ -163,6 +164,33 @@ def eliminarAplicacionPeligrosa(obj_app_pelig):
         print("Motivo:  ", error)
     finally:
         cerrar_conexion(dbConexion, dbCursor)
+
+#Elimina un registro de la tabla aplicacion_peligrosa. Recibe como parametro el id
+def eliminarAplicacionPeligrosaPorId(id):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        delete_aplicacion_peligrosa =  "DELETE FROM aplicacion_peligrosa where id = '{}' ;"
+        dbCursor.execute(delete_aplicacion_peligrosa.format(id))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion eliminarAplicacionPeligrosaPorId()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
+#Actualiza aplicaciones peligrosas en la tabla aplicacion_peligrosa. Recibe como parametro el obj obj_apel
+def actualizarAplicacionPeligrosa(obj_apel):
+    try:
+        dbConexion, dbCursor = conectar_postgres()
+        update_apel = "update aplicacion_peligrosa set nombre_sniffer='{}' where id = '{}';"
+        dbCursor.execute(update_apel.format(obj_apel.getNombreSniffer(),obj_apel.getId()))
+        dbConexion.commit()
+    except psycopg2.DatabaseError as error:
+        print("Ocurrio un error al ejecutar la funcion actualizarAplicacionPeligrosa()")
+        print("Motivo:  ", error)
+    finally:
+        cerrar_conexion(dbConexion, dbCursor)
+
 
 #CRUD PARA LA CLASE LimiteProceso
 #Lista las configuraciones sobre los limites de los procesos
