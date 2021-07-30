@@ -142,7 +142,7 @@ def edit_apel(id):
     modulo = 'apel'
     form = AppPeligrosaForm()
     label = 'Aplicaciones Peligrosas'
-    objeto = dao.eliminarAplicacionPeligrosaPorId(id)
+    objeto = dao.obtenerAplicacionPeligrosaPorId(id)
     form = AppPeligrosaForm(obj=objeto)
     #Modif----------------->
 
