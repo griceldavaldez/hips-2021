@@ -26,9 +26,9 @@ def login():
                     next_page = url_for('home.homepage')
                 return redirect(next_page)
             else:
-                flash('Credenciales incorrectas.')
+                flash('Credenciales incorrectas.', 'error')
         else:
-            flash('Usuario no encontrado.')
+            flash('Usuario no encontrado.', 'error')
     return render_template('auth/login.html', form=form, title='Login')
 
 
