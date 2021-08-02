@@ -13,11 +13,17 @@ from utils import get_fecha
 def verificar_md5sum(MD5SUM_LIST, admin):
     print("Inicia la funcion verificar_md5sum() \n", "\t\t Hora: " + get_fecha())
     body = ''
+    print(MD5SUM_LIST)
     for mi_hash in MD5SUM_LIST:
         subprocess.Popen("echo "+mi_hash+" >> "+md5_tmp_dir, stdout=subprocess.PIPE, shell=True)
     p =subprocess.Popen("md5sum -c "+md5_tmp_dir, stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
-    if output.decode("utf-8")[-3:-1] != 'OK':
+    #resultado = output.decode("utf-8")
+    #print(resultado)
+    #resultado = output.decode("utf-8")[-3:-1]
+    #print(resultado)
+    if "La suma no coincide" in output.decode("utf-8"):
+        #####rint("Entro aca")
         body+=output.decode("utf-8")
         archivo_dir = output.decode("utf-8").split(" ")[0]
         echo_alarmas_log("MD5SUM alterada.El valor hash MD5SUM cambio para "+archivo_dir , 'verificar_md5sum',"")
